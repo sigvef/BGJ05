@@ -61,29 +61,11 @@ function bootstrap(){
     dt = 0;
     t = +new Date();
     old_time = t;
-    KEYS = [];
-    KEYS.ESC = 27;
-    KEYS.SPACE = 32;
-    KEYS.UP = 38;
-    KEYS.DOWN = 40;
-    KEYS.LEFT = 37;
-    KEYS.RIGHT = 39;
 
-    for(var i=0;i<256;i++){
-        KEYS[i] = false;
-    }
-
-    document.addEventListener("keydown",function(e){
-        KEYS[e.keyCode] = true;
-    });
-
-    document.addEventListener("keyup",function(e){
-        KEYS[e.keyCode] = false;
-    });
 
     /* add game states here */
     
-    sm.addState("mainmenu", new MainMenuState());
+    //sm.addState("mainmenu", new MainMenuState());
     sm.addState("game", new GameState());
 
     resize();
@@ -92,9 +74,26 @@ function bootstrap(){
 
     /* start the game */
 
-    sm.changeState("mainmenu");
+    sm.changeState("game");
+    var  game = sm.activeState;
 
     console.log("bootstrapping loaded");
+
+    socket = io.connect('http://localhost:8000');
+
+    socket.on('connecting', function () {
+        console.log("trying to connect...");
+    });
+
+    socket.on('connect', function () {
+        console.log("Connected!");
+    });
+
+    socket.on('player connected', function (data) {
+        console.log('player connected', data);
+
+        game.addPlayer(new Player(1));
+    });
     requestAnimFrame(loop);
 }
 

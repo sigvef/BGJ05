@@ -19,7 +19,7 @@ Maze.prototype.render = function(ctx, x, y, w, h){
 Maze.prototype.generate = function(nwidth, nheight){
     var DEBUG = true;
     if(DEBUG)
-        console.log("Generating maze!");
+        //console.log("Generating maze!");
     var activeList = [[0,0]];
     var edges = [];
     var visited = {"0,0":true};
@@ -80,7 +80,7 @@ Maze.prototype.generate = function(nwidth, nheight){
         var ix = currentEdge[0][0]*2 + dx;
         var iy = currentEdge[0][1]*2 + dy;
         if(DEBUG)
-            console.log("Accessing map " + ix +"" + iy);
+            //console.log("Accessing map " + ix +"" + iy);
         map[ix][iy] = false;
     }
 
