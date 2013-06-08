@@ -96,7 +96,7 @@ Player.prototype.update = function(){
 
 
 Player.prototype.render = function(ctx){
-    ctx.fillStyle = 'yellow';
+    ctx.fillStyle = 'red';
     ctx.fillRect(this.x*GU, this.y*GU, GU*0.2, GU*0.2); 
 }
 

@@ -58,6 +58,8 @@ function bootstrap(){
 
     sm = new StateManager();
 
+    SELF_ID = 0;
+
     dt = 0;
     t = +new Date();
     old_time = t;
@@ -93,8 +95,12 @@ function bootstrap(){
         console.log("trying to connect...");
     });
 
-    socket.on('connect', function () {
+    socket.on('connect', function() {
         console.log("Connected!");
+    });
+
+    socket.on('id', function(id){
+        SELF_ID = id;
     });
 
     socket.on('keyframe', function(keyframe){

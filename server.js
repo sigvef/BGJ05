@@ -27,6 +27,7 @@ io.sockets.on('connection', function (socket) {
     var player = new Player(game, {});
     player.socket = socket;
     game.addPlayer(player);
+    socket.emit('id', player.id);
 
     sendKeyframe(socket);
     sendEntireMaze(socket);

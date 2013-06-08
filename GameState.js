@@ -9,7 +9,7 @@ GameState = (function(){
         this.maze = {};
         this.players = {};
         this.bombs = [];
-        this.player_id_counter = 0;
+        this.player_id_counter = 1;
 
         this.renderable = renderable;
 
@@ -106,14 +106,15 @@ GameState = (function(){
                 this.bombs[i].render_light(this.darkctx);
             }
 
-            ctx.save();
-            ctx.globalAlpha = 0.98;
-            ctx.drawImage(this.darkvas, 0, 0);
-            ctx.restore();
-
             for(var i in this.players){
                 this.players[i].render(ctx);
             }
+
+            ctx.save();
+            ctx.drawImage(this.darkvas, 0, 0);
+            ctx.restore();
+
+            SELF_ID && this.players[SELF_ID].render(ctx);
 
             for(var i=0;i<this.bombs.length;i++){
                 this.bombs[i].render(ctx);
