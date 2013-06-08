@@ -31,7 +31,7 @@ GameState.prototype.render = function(ctx){
     this.darkctx.fillRect(0,0, 16*GU, 9*GU);
 
     this.maze.render(ctx, 0, 0, 16, 9);
-
+    this.player.render(ctx);
     for(var i=0;i<this.bombs.length;i++){
         this.bombs[i].render_light(this.darkctx);
     }
@@ -41,7 +41,7 @@ GameState.prototype.render = function(ctx){
     ctx.drawImage(this.darkvas, 0, 0);
     ctx.restore();
 
-    this.player.render(ctx);
+    
 
     for(var i=0;i<this.bombs.length;i++){
         this.bombs[i].render(ctx);
