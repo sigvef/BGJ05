@@ -194,7 +194,7 @@ GameState.prototype.update = function(){
 
     for(var i=0;i<this.bombs.length;i++){
         if(this.bombs[i].update()){
-            Array.remove(this.bombs, i--);
+            this.bombs[i--] = this.bombs[this.bombs.length-1];
         }
     }
 }
