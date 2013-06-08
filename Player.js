@@ -6,7 +6,7 @@ function Player(x,y){
 }
 
 Player.FRICTION = 0.8;
-Player.SPEED = 0.05;
+Player.SPEED = 0.08;
 
 Player.prototype.update = function(){
 
@@ -24,6 +24,10 @@ Player.prototype.update = function(){
 
     if(KEYS[KEYS.DOWN]){
         this.dy = 1;
+    }
+
+    if(KEYS[KEYS.SPACE]){
+        sm.activeState.placeBomb(this.x, this.y, 3999);
     }
 
     this.x += this.dx * Player.SPEED;

@@ -1,6 +1,11 @@
 function GameState(){
     this.maze;
     this.player;
+    this.bombs = [];
+}
+
+GameState.prototype.placeBomb = function(x,y,duration){
+    this.bombs.push(new LightBomb(x,y,duration));
 }
 
 GameState.prototype.init = function(){
@@ -24,6 +29,10 @@ GameState.prototype.render = function(ctx){
 
     this.maze.render(ctx, 0, 0, 16, 9);
     this.player.render(ctx);
+
+    for(var i=0;i<this.bombs.length;i++){
+        this.bombs[i].render(ctx);
+    }
 }
 
 GameState.prototype.update = function(){
@@ -31,4 +40,10 @@ GameState.prototype.update = function(){
         sm.changeState('mainmenu'); 
     }
     this.player.update();
+
+    for(var i=0;i<this.bombs.length;i++){
+        if(this.bombs[i].update()){
+            this.bombs.remove(i--);
+        }
+    }
 }

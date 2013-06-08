@@ -6,6 +6,20 @@ function smoothstep(a, b, t) {
     return b * v + a * (1 - v);
 };
 
+function lerp(a, b, t){
+    return (a * t) + (b * (1 - t));
+}
+
+function square_interpolation(a, b, t){
+    t = t*t; 
+    return lerp(a,b,t);
+}
+
+function cube_interpolation(a, b, t){
+    t = t*t*t;
+    return lerp(a,b,t);
+}
+
 function clamp(low, x, high){
     return Math.max(low,Math.min(x,high));
 }
@@ -45,9 +59,8 @@ function bootstrap(){
     sm = new StateManager();
 
     dt = 0;
-    t = 0;
-    time = +new Date();
-    old_time = time;
+    t = +new Date();
+    old_time = t;
     KEYS = [];
     KEYS.ESC = 27;
     KEYS.SPACE = 32;
@@ -97,3 +110,11 @@ function resize(e){
 }
 
 window.onresize = resize;
+
+
+// Array Remove - By John Resig (MIT Licensed)
+Array.prototype.remove = function(from, to) {
+  var rest = this.slice((to || from) + 1 || this.length);
+  this.length = from < 0 ? this.length + from : from;
+  return this.push.apply(this, rest);
+};
