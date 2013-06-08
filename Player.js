@@ -58,19 +58,11 @@ Player.prototype.update = function(){
         }
 
         //collision in y direction
-        else if(sm.activeState.maze.collide(lastx,this.y) == true){
+        if(sm.activeState.maze.collide(lastx,this.y) == true){
             this.y = lasty;
             this.dy = 0;
             console.log("hit y");
-        }
-        //collision in both x and y dir
-        else{
-            
-            this.x = lastx;
-            this.y = lasty;
-            this.dx = 0;
-            this.dy = 0;
-            console.log("hit both");
+
         }
 
     }
