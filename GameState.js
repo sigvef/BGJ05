@@ -58,8 +58,9 @@ GameState.prototype.createKeyframe = function(){
 GameState.prototype.loadFrame = function(frame){
     this.players = {};
     for(var i in keyframe.players){
-        var player = new Player(this, keyframe.players[i]); 
-        this.players[i] = player;
+        for(var j in keyframe.players[i]){
+            this.players[i][j] = keyframe.players[i][j];
+        }
     }
 }
 
