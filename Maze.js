@@ -2,7 +2,7 @@ function Maze(){
 
     /* internal is some internal representation of the maze,
        either a graph or an array of cells or whatever is best */
-    this.internal = this.generate();
+    this.internal = this.generate(16,9);
 }
 
 Maze.prototype.render = function(ctx, x, y, w, h){
@@ -16,7 +16,7 @@ Maze.prototype.render = function(ctx, x, y, w, h){
 
 
 /* init this.internal if n is undefined, else grow internal by n */
-Maze.prototype.generate = function(n){
+Maze.prototype.generate = function(nwidth, nheight){
     var DEBUG = true;
     if(DEBUG)
         console.log("Generating maze!");
@@ -33,7 +33,7 @@ Maze.prototype.generate = function(n){
             for(var j = -1; j < 2 && !added; j++){
                 var x = i+currentNode[0];
                 var y = j+currentNode[1];
-                if(x<0 || y<0 || x > 16 || y > 9 || i*j != 0) continue;
+                if(x<0 || y<0 || x > nwidth || y > nheight || i*j != 0) continue;
 
                 var newNode = [x,y];
                 
@@ -60,9 +60,9 @@ Maze.prototype.generate = function(n){
     //TODO: Integrate in main loop, or move elsewhere.
     var map = [];
 
-    for(var i = 0; i < 16*2+1; i++){
+    for(var i = 0; i < nwidth*2+1; i++){
         map[i]=[]; 
-        for(var j = 0; j < 9*2; j++){
+        for(var j = 0; j < nheight*2; j++){
             if(i%2 == 1 || j % 2 == 1){
                 map[i][j] = true;
             }else{
