@@ -8,6 +8,20 @@ function Player(x,y){
     
     this.personfront = new Image();
     this.personfront.src = "personfront.png";
+    
+    this.personback = new Image();
+    this.personback.src = "personback.png";
+    
+    this.personside = new Image();
+    this.personside.scr = "personside.png";
+    
+        
+    this.personside = new Image();
+    this.personside.scr = "personleft.png";
+    
+    this.personimages = {"down": this.personfront, "up": this.personback: "right": this.personside, "left": this.personleft}
+    
+    
 }
 
 Player.BOMB_PLACE_COOLDOWN = 10;
