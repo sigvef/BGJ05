@@ -105,6 +105,12 @@ Player.prototype.update = function(){
 
 Player.prototype.render = function(ctx){
     ctx.drawImage(this.personfront, this.x*GU-GU*this.playerSize/2, this.y*GU-GU*this.playerSize/2, GU*this.playerSize,GU*this.playerSize); 
+
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'bottom';
+    ctx.font = (0.2*GU) + 'px Arial'; //TODO: cooler font
+    ctx.fillStyle = 'white';
+    ctx.fillText('[' + this.id + '] ' + (this.name || 'anonymous'), (this.x)*GU, (this.y - this.playerSize)*GU);
 }
 
 Player.prototype.serialize = function(){
@@ -119,4 +125,3 @@ return Player;
 try{
     module.exports = Player;
 }catch(e){}
-
