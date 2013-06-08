@@ -3,6 +3,7 @@ function Player(x,y){
     this.y = y || 0;
     this.dx = 0;
     this.dy = 0;
+    this.playerSize = 0.5;
 
     this.bomb_place_cooldown = Player.BOMB_PLACE_COOLDOWN;
     
@@ -71,9 +72,9 @@ Player.prototype.update = function(){
     this.dx *= Player.FRICTION;
     this.dy *= Player.FRICTION;
 
-    if(sm.activeState.maze.collide(this.x,this.y) == true){
+    if(this.x <= 0 || sm.activeState.maze.collide(this.x,this.y) == true){
         //collision in x direction
-        if(sm.activeState.maze.collide(this.x,lasty) == true){
+        if(this.x <= 0 ||  sm.activeState.maze.collide(this.x,lasty) == true){
             this.x = lastx;
             this.dx = 0;
             console.log("hit x");
@@ -87,7 +88,6 @@ Player.prototype.update = function(){
             console.log("hit y");
 
         }
-
     }
 
     if(this.bomb_place_cooldown > 0){
@@ -97,6 +97,7 @@ Player.prototype.update = function(){
 
 
 Player.prototype.render = function(ctx){
-    ctx.drawImage(this.personimages[this.personDirection], this.x*GU, this.y*GU, GU*0.5, GU*0.5); 
+    ctx.drawImage(this.personimages[this.personDirection], this.x*GU-GU*this.playerSize/2, 
+        this.y*GU-GU*this.playerSize/2, GU*this.playerSize,GU*this.playerSize); 
 }
 

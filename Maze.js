@@ -3,16 +3,17 @@ function Maze(){
     /* internal is some internal representation of the maze,
        either a graph or an array of cells or whatever is best */
     this.internal = this.generate(16,9);
-    blockSize = 0.5*GU;
     this.hedgeImage = new Image();
     this.groundImage = new Image();
     this.hedgeImage.src = "hedge.png";
     this.groundImage.src = "ground.png";
+    this.ratioBlockGU = 0.5
 }
 
 Maze.prototype.render = function(ctx, x, y, w, h){
     for(var nx = 0; nx < this.internal.length; nx++){
         for(var ny = 0; ny < this.internal[0].length; ny++){
+            var blockSize = this.ratioBlockGU*GU;
             if(this.internal[nx][ny]){
                 //Hedge
                 ctx.drawImage(this.hedgeImage, x+nx*blockSize,y+ny*blockSize,blockSize,blockSize);
@@ -26,6 +27,7 @@ Maze.prototype.render = function(ctx, x, y, w, h){
 }
 
 Maze.prototype.collide = function(x, y){
+    var blockSize = this.ratioBlockGU*GU;
     return this.internal[Math.floor(GU*x/blockSize)][Math.floor(GU*y/blockSize)];
 }
 
