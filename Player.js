@@ -1,16 +1,18 @@
 var Player = (function(){
-function Player(id){
 
-    this.id = id;
+function Player(game, params){ 
+    this.id = params.id;
 
-    this.nickname = "";
+    this.game = game;
+
+    this.nickname = params.name || "";
     
     this.socket;
 
-    this.x = 0;
-    this.y = 0;
-    this.dx = 0;
-    this.dy = 0;
+    this.x = params.x || 0;
+    this.y = params.y || 0;
+    this.dx = params.dx || 0;
+    this.dy = params.dy || 0;
 
     this.bomb_place_cooldown = Player.BOMB_PLACE_COOLDOWN;
 
@@ -50,7 +52,7 @@ Player.prototype.update = function(){
     }
 
     if(this.KEYS[this.KEYS.SPACE] && this.bomb_place_cooldown == 0){
-        sm.activeState.placeBomb(this.x, this.y, 999);
+        this.game.placeBomb(this.x, this.y, 999);
         this.bomb_place_cooldown = Player.BOMB_PLACE_COOLDOWN;
     }
 
@@ -75,6 +77,10 @@ Player.prototype.update = function(){
 Player.prototype.render = function(ctx){
     ctx.fillStyle = 'yellow';
     ctx.fillRect(this.x*GU, this.y*GU, GU*0.2, GU*0.2); 
+}
+
+Player.prototype.serialize = function(){
+    return {id: this.id, name: this.name, x: this.x, y: this.y, dx: this.dx, dy: this.dy};
 }
 
 return Player;

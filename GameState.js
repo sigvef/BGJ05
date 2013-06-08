@@ -1,5 +1,6 @@
 try{
 var Maze = require('./Maze');
+var LightBomb = require('./LightBomb');
 }catch(e){}
 
 GameState = (function(){
@@ -23,25 +24,31 @@ GameState = (function(){
        var keyframe = {};
        keyframe.maze = this.maze;
        keyframe.players = {};
+       keyframe.bombs = [];
 
        for(var i in this.players){
-            var p = this.players[i];
-            keyframe.players[i] = {id: p.id, name: p.name, x: p.x, y: p.y, dx: p.dx, dy: p.dy};
+            keyframe.players[i] = this.players[i].serialize();
        }
+
+       for(var i in this.bombs){
+            keyframe.bombs[i] = this.bombs[i].serialize();
+       }
+
        return keyframe;
     }
 
     GameState.prototype.loadKeyframe = function(keyframe){
         this.players = {};
+        this.bombs = [];
+
        for(var i in keyframe.players){
-            var p = keyframe.players[i];
-            var player = new Player(p.id); 
-            player.name = p.name;
-            player.x = p.x;
-            player.y = p.y;
-            player.dx = p.dx;
-            player.dy = p.dy;
+            var player = new Player(this, keyframe.players[i]); 
             this.players[i] = player;
+       }
+
+       for(var i in keyframe.bombs){
+            var bomb = new LightBomb(keyframe.bombs[i]); 
+            this.bombs[i] = bomb;
        }
     }
 
@@ -55,7 +62,7 @@ GameState = (function(){
     }
 
     GameState.prototype.placeBomb = function(x,y,duration){
-        this.bombs.push(new LightBomb(x,y,duration));
+        this.bombs.push(new LightBomb({x:x, y:y, duration_in_ms: duration}));
     }
 
     GameState.prototype.init = function(){
@@ -85,18 +92,16 @@ GameState = (function(){
 
             ctx.save();
             ctx.globalAlpha = 0.98;
-            //ctx.drawImage(this.darkvas, 0, 0);
+            ctx.drawImage(this.darkvas, 0, 0);
             ctx.restore();
 
             for(var i in this.players){
                 this.players[i].render(ctx);
             }
 
-            /*
             for(var i=0;i<this.bombs.length;i++){
                 this.bombs[i].render(ctx);
             }
-            */
         }
     }
 
@@ -105,13 +110,11 @@ GameState = (function(){
             this.players[i].update();
         }
 
-        /*
         for(var i=0;i<this.bombs.length;i++){
             if(this.bombs[i].update()){
-                this.bombs.remove(i--);
+                Array.remove(this.bombs, i--);
             }
         }
-        */
     }
 
     return GameState;

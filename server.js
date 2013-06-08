@@ -1,6 +1,7 @@
 var io = require('socket.io').listen(8000);
 var GameState = require('./GameState');
 var Player = require('./Player');
+var LightBomb = require('./LightBomb');
 
 var game = new GameState();
 game.resume();
@@ -18,7 +19,7 @@ io.sockets.on('connection', function (socket) {
 
     console.log('We got a connection!');
 
-    var player = new Player();
+    var player = new Player(game, {});
     player.socket = socket;
     game.addPlayer(player);
 
@@ -63,3 +64,10 @@ setTimeout(function loop(){
 
     setTimeout(loop, 0);
 }, 0);
+
+// Array Remove - By John Resig (MIT Licensed)
+Array.remove = function(array, from, to) {
+  var rest = array.slice((to || from) + 1 || array.length);
+  array.length = from < 0 ? array.length + from : from;
+  return array.push.apply(array, rest);
+};
