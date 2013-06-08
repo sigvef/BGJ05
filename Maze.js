@@ -5,7 +5,9 @@ function Maze(){
     this.internal = this.generate(16,9);
     blockSize = 0.5*GU;
     this.hedgeImage = new Image();
+    this.groundImage = new Image();
     this.hedgeImage.src = "hedge.png";
+    this.groundImage.src = "ground.png";
 }
 
 Maze.prototype.render = function(ctx, x, y, w, h){
@@ -15,9 +17,8 @@ Maze.prototype.render = function(ctx, x, y, w, h){
                 //Hedge
                 ctx.drawImage(this.hedgeImage, x+nx*blockSize,y+ny*blockSize,blockSize,blockSize);
             }else{
-                //Walkable
-                ctx.fillStyle ="#FFFFFF" ;
-                ctx.fillRect(x+nx*blockSize,y+ny*blockSize,blockSize,blockSize);
+                //Ground
+                ctx.drawImage(this.groundImage, x+nx*blockSize,y+ny*blockSize,blockSize,blockSize);
             }
 
         }
