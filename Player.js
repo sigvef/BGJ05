@@ -40,11 +40,40 @@ Player.prototype.update = function(){
         this.dx = this.dx / speed;
         this.dy = this.dy / speed;
     }
+    var lastx = this.x;
+    var lasty = this.y;
 
     this.x += this.dx * Player.SPEED;
     this.y += this.dy * Player.SPEED;
     this.dx *= Player.FRICTION;
     this.dy *= Player.FRICTION;
+
+    if(sm.activeState.maze.collide(this.x,this.y) == true){
+        //collision in x direction
+        if(sm.activeState.maze.collide(this.x,lasty) == true){
+            this.x = lastx;
+            this.dx = 0;
+            console.log("hit x");
+
+        }
+
+        //collision in y direction
+        else if(sm.activeState.maze.collide(lastx,this.y) == true){
+            this.y = lasty;
+            this.dy = 0;
+            console.log("hit y");
+        }
+        //collision in both x and y dir
+        else{
+            
+            this.x = lastx;
+            this.y = lasty;
+            this.dx = 0;
+            this.dy = 0;
+            console.log("hit both");
+        }
+
+    }
 
     if(this.bomb_place_cooldown > 0){
         this.bomb_place_cooldown--;

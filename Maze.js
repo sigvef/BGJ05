@@ -3,17 +3,21 @@ function Maze(){
     /* internal is some internal representation of the maze,
        either a graph or an array of cells or whatever is best */
     this.internal = this.generate(16,9);
+    blockSize = 0.5*GU;
 }
 
 Maze.prototype.render = function(ctx, x, y, w, h){
     for(var nx = 0; nx < this.internal.length; nx++){
         for(var ny = 0; ny < this.internal[0].length; ny++){
             ctx.fillStyle = this.internal[nx][ny] ?  "#000000" : "#FFFFFF" ;
-            ctx.fillRect(x+nx*GU*0.5,y+ny*GU*0.5,GU*0.5,GU*0.5);
+            ctx.fillRect(x+nx*blockSize,y+ny*blockSize,blockSize,blockSize);
         }
     }
 }
 
+Maze.prototype.collide = function(x, y){
+    return this.internal[x/blockSize|0][y/blockSize|0];
+}
 
 /* init this.internal if n is undefined, else grow internal by n */
 Maze.prototype.generate = function(nwidth, nheight){
