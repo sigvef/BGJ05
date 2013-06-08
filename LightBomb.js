@@ -20,16 +20,11 @@ LightBomb.prototype.update = function(){
     }
 };
 
-LightBomb.prototype.render = function(ctx){
+LightBomb.prototype.render_light = function(darkvas){
 
-    if(this.planted_time + this.duration_in_ms > t){
-        ctx.fillStyle = 'green';
-        ctx.fillRect(this.x*GU, this.y*GU, GU*0.1, GU*0.1);
-        ctx.fillStyle = 'white';
-        ctx.fillText("" + (this.duration_in_ms - t + this.planted_time)/1000|0, this.x*GU, this.y*GU);
-    }else{
+    if(this.planted_time + this.duration_in_ms <= t){
         LightBomb.canvas.width = LightBomb.canvas.width;
-        LightBomb.ctx.fillStyle = 'rgba(255,255,255,' + lerp(0.2, 0, 1 - (t - this.planted_time - this.duration_in_ms)/LightBomb.ALIVE_TIME_IN_MS) + ')';
+        LightBomb.ctx.fillStyle = 'rgba(255,255,255,' + square_interpolation(1, 0, 1 - (t - this.planted_time - this.duration_in_ms)/LightBomb.ALIVE_TIME_IN_MS) + ')';
         LightBomb.ctx.beginPath();
         LightBomb.ctx.arc(this.x*GU, this.y*GU, (t - this.planted_time - this.duration_in_ms)/1000*GU, 0, 2 * Math.PI, false);
         LightBomb.ctx.fill();
@@ -40,6 +35,17 @@ LightBomb.prototype.render = function(ctx){
         LightBomb.ctx.arc(this.x*GU, this.y*GU, radius >= 0 ? radius : 0, 0, 2 * Math.PI, false);
         LightBomb.ctx.fill();
 
-        ctx.drawImage(LightBomb.canvas, 0, 0);
+        darkvas.globalCompositeOperation = 'destination-out';
+        darkvas.drawImage(LightBomb.canvas, 0, 0);
+    }
+
+}
+
+LightBomb.prototype.render = function(ctx){
+    if(this.planted_time + this.duration_in_ms > t){
+        ctx.fillStyle = 'green';
+        ctx.fillRect(this.x*GU, this.y*GU, GU*0.1, GU*0.1);
+        ctx.fillStyle = 'white';
+        ctx.fillText("" + (this.duration_in_ms - t + this.planted_time)/1000|0, this.x*GU, this.y*GU);
     }
 };

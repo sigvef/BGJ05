@@ -2,6 +2,9 @@ function GameState(){
     this.maze;
     this.player;
     this.bombs = [];
+
+    this.darkvas = document.createElement('canvas');
+    this.darkctx = this.darkvas.getContext('2d');
 }
 
 GameState.prototype.placeBomb = function(x,y,duration){
@@ -20,15 +23,30 @@ GameState.prototype.resume = function(){
 }
 
 GameState.prototype.render = function(ctx){
-    ctx.fillStyle = 'darkblue';
-    ctx.fillRect(0,0, 16*GU, 9*GU);
+    
+    this.darkvas.width = 16*GU;
+    this.darkvas.height = 9*GU;
+
+    this.darkctx.fillStyle = 'black';
+    this.darkctx.fillRect(0,0, 16*GU, 9*GU);
 
     this.maze.render(ctx, 0, 0, 16, 9);
+
+    for(var i=0;i<this.bombs.length;i++){
+        this.bombs[i].render_light(this.darkctx);
+    }
+
+    ctx.save();
+    ctx.globalAlpha = 0.99;
+    ctx.drawImage(this.darkvas, 0, 0);
+    ctx.restore();
+
     this.player.render(ctx);
 
     for(var i=0;i<this.bombs.length;i++){
         this.bombs[i].render(ctx);
     }
+
 }
 
 GameState.prototype.update = function(){
