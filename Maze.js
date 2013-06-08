@@ -25,11 +25,7 @@ Maze.prototype.generate = function(n){
     var visited = {"0,0":true};
 
     while(activeList.length > 0){
-        if(DEBUG)
-            console.log("Len: " + activeList.length);
         var currentNode = activeList[Math.floor(Math.random() * activeList.length)];
-        if(DEBUG)
-            console.log("Current node "+currentNode); 
         var added = false;
 
         //Visit all neighbors.
@@ -37,14 +33,10 @@ Maze.prototype.generate = function(n){
             for(var j = -1; j < 2 && !added; j++){
                 var x = i+currentNode[0];
                 var y = j+currentNode[1];
-                if(x<0 || y<0 || x > 16 || y > 9) continue;
+                if(x<0 || y<0 || x > 16 || y > 9 || i*j != 0) continue;
 
-                var newNode = [0,0];
-                newNode[0] = x;
-                newNode[1] = y;
+                var newNode = [x,y];
                 
-                if(DEBUG)
-                    console.log("New node: "+newNode);
                 if(visited[newNode+""] == undefined){
                     edges.push([currentNode,newNode]);
                     activeList.push(newNode);
@@ -57,8 +49,6 @@ Maze.prototype.generate = function(n){
         //If all neighbors have been visited before, so nothing new is added, remove
         //from active set
         if(!added){
-            if(DEBUG)
-                console.log("Removing "+currentNode);
             activeList.splice(activeList.indexOf(currentNode),1);
         }
 
@@ -72,7 +62,7 @@ Maze.prototype.generate = function(n){
 
     for(var i = 0; i < 16*2+1; i++){
         map[i]=[]; 
-        for(var j = 0; j < 9*2+1; j++){
+        for(var j = 0; j < 9*2; j++){
             if(i%2 == 1 || j % 2 == 1){
                 map[i][j] = true;
             }else{
