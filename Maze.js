@@ -3,13 +3,24 @@ function Maze(){
     /* internal is some internal representation of the maze,
        either a graph or an array of cells or whatever is best */
     this.internal = this.generate(16,9);
+    this.hedgeImage = new Image();
+    this.hedgeImage.src = "hedge.png";
 }
 
 Maze.prototype.render = function(ctx, x, y, w, h){
     for(var nx = 0; nx < this.internal.length; nx++){
         for(var ny = 0; ny < this.internal[0].length; ny++){
-            ctx.fillStyle = this.internal[nx][ny] ?  "#000000" : "#FFFFFF" ;
-            ctx.fillRect(x+nx*GU*0.5,y+ny*GU*0.5,GU*0.5,GU*0.5);
+            //ctx.fillStyle = this.internal[nx][ny] ?  "#000000" : "#FFFFFF" ;
+            //ctx.fillRect(x+nx*GU*0.5,y+ny*GU*0.5,GU*0.5,GU*0.5);
+            if(this.internal[nx][ny]){
+                //Hedge
+                ctx.drawImage(this.hedgeImage, x+nx*GU*0.5,y+ny*GU*0.5,GU*0.5,GU*0.5);
+            }else{
+                //Walkable
+                ctx.fillStyle ="#FFFFFF" ;
+                ctx.fillRect(x+nx*GU*0.5,y+ny*GU*0.5,GU*0.5,GU*0.5);
+            }
+
         }
     }
 }
