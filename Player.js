@@ -48,9 +48,9 @@ Player.prototype.update = function(){
     this.dx *= Player.FRICTION;
     this.dy *= Player.FRICTION;
 
-    if(sm.activeState.maze.collide(this.x,this.y) == true){
+    if(this.x <= 0 || sm.activeState.maze.collide(this.x,this.y) == true){
         //collision in x direction
-        if(sm.activeState.maze.collide(this.x,lasty) == true){
+        if(this.x <= 0 ||  sm.activeState.maze.collide(this.x,lasty) == true){
             this.x = lastx;
             this.dx = 0;
             console.log("hit x");
@@ -64,7 +64,6 @@ Player.prototype.update = function(){
             console.log("hit y");
 
         }
-
     }
 
     if(this.bomb_place_cooldown > 0){
