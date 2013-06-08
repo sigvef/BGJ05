@@ -5,6 +5,9 @@ function Player(x,y){
     this.dy = 0;
 
     this.bomb_place_cooldown = Player.BOMB_PLACE_COOLDOWN;
+    
+    this.personfront = new Image();
+    this.personfront.src = "personfront.png";
 }
 
 Player.BOMB_PLACE_COOLDOWN = 10;
@@ -82,7 +85,6 @@ Player.prototype.update = function(){
 
 
 Player.prototype.render = function(ctx){
-    ctx.fillStyle = 'yellow';
-    ctx.fillRect(this.x*GU, this.y*GU, GU*0.2, GU*0.2); 
+    ctx.drawImage(this.personfront, this.x*GU, this.y*GU, GU*0.5, GU*0.5); 
 }
 
