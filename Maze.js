@@ -26,7 +26,7 @@ Maze.prototype.render = function(ctx, x, y, w, h){
 }
 
 Maze.prototype.collide = function(x, y){
-    return this.internal[x/blockSize|0][y/blockSize|0];
+    return this.internal[Math.floor(GU*x/blockSize)][Math.floor(GU*y/blockSize)];
 }
 
 /* init this.internal if n is undefined, else grow internal by n */
