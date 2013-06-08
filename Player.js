@@ -73,21 +73,21 @@ Player.prototype.update = function(){
     this.dx *= Player.FRICTION;
     this.dy *= Player.FRICTION;
 
-    if(this.x <= 0 || sm.activeState.maze.collide(this.x+this.hitBox,this.y+this.hitBox) == true
+    if(sm.activeState.maze.collide(this.x+this.hitBox,this.y+this.hitBox) == true
             || sm.activeState.maze.collide(this.x+this.hitBox,this.y-this.hitBox) == true
             || sm.activeState.maze.collide(this.x-this.hitBox,this.y+this.hitBox) == true
             || sm.activeState.maze.collide(this.x-this.hitBox,this.y-this.hitBox) == true
             ){
 
         //collision in x direction
-        if(this.x <= 0 ||  sm.activeState.maze.collide(this.x+this.hitBox,lasty+this.hitBox) == true 
+        if(sm.activeState.maze.collide(this.x+this.hitBox,lasty+this.hitBox) == true 
                 || sm.activeState.maze.collide(this.x+this.hitBox,lasty-this.hitBox)== true
                 || sm.activeState.maze.collide(this.x-this.hitBox,lasty+this.hitBox)== true
                 || sm.activeState.maze.collide(this.x-this.hitBox,lasty-this.hitBox)== true
                 ){
             this.x = lastx;
             this.dx = 0;
-            console.log("hit x");
+            //console.log("hit x");
         }
 
         //collision in y direction
@@ -98,7 +98,7 @@ Player.prototype.update = function(){
                 ){
             this.y = lasty;
             this.dy = 0;
-            console.log("hit y");
+            //console.log("hit y");
 
         }
     }

@@ -1,6 +1,7 @@
 function GameState(){
     this.maze;
     this.player;
+    this.firefly;
     this.bombs = [];
 
     this.darkvas = document.createElement('canvas');
@@ -20,6 +21,7 @@ GameState.prototype.pause = function(){
 GameState.prototype.resume = function(){
     this.maze = new Maze();
     this.player = new Player(0.25,0.25);
+    this.firefly = new Firefly(2,2);
 }
 
 GameState.prototype.render = function(ctx){
@@ -32,6 +34,7 @@ GameState.prototype.render = function(ctx){
 
     this.maze.render(ctx, 0, 0, 16, 9);
     this.player.render(ctx);
+    this.firefly.render(ctx);
     for(var i=0;i<this.bombs.length;i++){
         this.bombs[i].render_light(this.darkctx);
     }
@@ -54,6 +57,7 @@ GameState.prototype.update = function(){
         sm.changeState('mainmenu'); 
     }
     this.player.update();
+    this.firefly.update();
 
     for(var i=0;i<this.bombs.length;i++){
         if(this.bombs[i].update()){

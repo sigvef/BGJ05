@@ -30,7 +30,6 @@ Maze.prototype.collide = function(x, y){
     var blockSize = this.ratioBlockGU*GU;
     var nx = Math.floor(GU*x/blockSize);
     var ny = Math.floor(GU*y/blockSize);
-    console.log("Coords: " + nx + " " + ny);
     if(this.internal[nx] == undefined)
         return true;
     return this.internal[nx][ny];
