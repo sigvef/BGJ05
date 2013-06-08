@@ -11,6 +11,10 @@ function sendKeyframe(socket){
     socket.emit('keyframe', game.createKeyframe());
 }
 
+function sendFrame(socket){
+    socket.emit('frame', game.createFrame());
+}
+
 function sendEntireMaze(socket){
     socket.emit('maze', game.maze.internal);
 }
@@ -59,7 +63,7 @@ setTimeout(function loop(){
 
     var keyframe = game.createKeyframe();
     for(var i in game.players){
-        game.players[i].socket.emit('keyframe', keyframe);
+        sendKeyframe(game.players[i].socket);
     }
 
     setTimeout(loop, 0);

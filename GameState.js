@@ -19,6 +19,13 @@ GameState = (function(){
         }
     }
 
+    GameState.prototype.createFrame = function(){
+        var frame = {};
+       for(var i in this.players){
+            keyframe.players[i] = this.players[i].serialize();
+       }
+       return frame;
+    }
 
     GameState.prototype.createKeyframe = function(){
        var keyframe = {};
@@ -35,6 +42,14 @@ GameState = (function(){
        }
 
        return keyframe;
+    }
+
+    GameState.prototype.loadFrame = function(frame){
+       this.players = {};
+       for(var i in keyframe.players){
+            var player = new Player(this, keyframe.players[i]); 
+            this.players[i] = player;
+       }
     }
 
     GameState.prototype.loadKeyframe = function(keyframe){

@@ -101,6 +101,10 @@ function bootstrap(){
         game.loadKeyframe(keyframe);
     });
 
+    socket.on('frame', function(frame){
+        game.loadFrame(eyframe);
+    });
+
     socket.on('maze', function(maze){
         console.log("GOT MAZE");
         game.maze.internal = maze;
