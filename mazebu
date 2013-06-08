@@ -1,0 +1,214 @@
+function Maze(){
+
+    /* internal is some internal representation of the maze,
+       either a graph or an array of cells or whatever is best */
+    this.patternsMatrix = {};
+    this.cells = {};
+    this.internal = this.generate(16,9);
+    blockSize = 0.5*GU;
+    this.hedgeImage = new Image();
+    this.hedgeImage.src = "hedge.png";
+}
+
+Maze.prototype.render = function(ctx, x, y, w, h){
+    for(var nx = 0; nx < this.internal.length; nx++){
+        for(var ny = 0; ny < this.internal[0].length; ny++){
+            if(this.internal[nx][ny]){
+                //Hedge
+                ctx.drawImage(this.hedgeImage, x+nx*blockSize,y+ny*blockSize,blockSize,blockSize);
+            }else{
+                //Walkable
+                ctx.fillStyle ="#FFFFFF" ;
+                ctx.fillRect(x+nx*blockSize,y+ny*blockSize,blockSize,blockSize);
+            }
+
+        }
+    }
+}
+
+Maze.prototype.collide = function(x, y){
+    return this.internal[x/blockSize|0][y/blockSize|0];
+}
+
+
+World.prototype.getPatternAt = function(coord) {
+    if (!this.patternsMatrix[coord.row] || ! this.patternsMatrix[coord.row][coord.col]) {
+        return null;
+    }
+    return this.patternsMatrix[coord.row][coord.col];
+};
+
+World.prototype.cellExists = function(global_row, global_col) {
+    return this.cells[global_row] && this.cells[global_row][global_col];
+};
+
+World.prototype.addCellAt = function(cell, global_row, global_col) {
+    if (!this.cells[global_row]) {
+        this.cells[global_row] = {};
+    }
+    this.cells[global_row][global_col] = cell;
+};
+
+World.prototype.getCellAt = function(global_row, global_col) {
+    if (!this.cellExists(global_row, global_col)) {
+        var pattern_coord = Pattern.translateGlobalToPattern(global_row, global_col);
+        pattern = this.generatePatternFor(pattern_coord);
+        this.checkDogCreationAt(pattern_coord);
+
+        for (var internal_row = 0; internal_row < 3; internal_row++) {
+            for (var internal_col = 0; internal_col < 3; internal_col++) {
+                this.addCellAt(pattern.internalCellAt(internal_row, internal_col), pattern_coord.row * 3 + internal_row, pattern_coord.col * 3 + internal_col);
+            }
+        }
+    }
+    return this.cells[global_row][global_col];
+};
+
+World.CONNECTION_CHANCES = [1,  1,  0.025, 0.001];
+
+
+
+/* init this.internal if n is undefined, else grow internal by n */
+Maze.prototype.generate = function(nwidth, nheight){
+    var DEBUG = true;
+    if(DEBUG)
+        console.log("Generating maze!");
+    var activeList = [[0,0]];
+    var edges = [];
+    var visited = {"0,0":true};
+
+    while(activeList.length > 0){
+        var currentNode = activeList[Math.floor(Math.random() * activeList.length)];
+        var added = false;
+
+        //Visit all neighbors.
+        for(var i = -1; i < 2 && !added; i++){
+            for(var j = -1; j < 2 && !added; j++){
+                var x = i+currentNode[0];
+                var y = j+currentNode[1];
+                if(x<0 || y<0 || x >= nwidth || y >= nheight || i*j != 0) continue;
+
+                var newNode = [x,y];
+
+                if(visited[newNode+""] == undefined){
+                    edges.push([currentNode,newNode]);
+                    activeList.push(newNode);
+                    visited[newNode+""] = true;
+                    added = true;
+                }
+            }
+        }
+
+        //If all neighbors have been visited before, so nothing new is added, remove
+        //from active set
+        if(!added){
+            activeList.splice(activeList.indexOf(currentNode),1);
+        }
+
+    }
+
+
+
+    //Generate the actual map. 
+    //TODO: Integrate in main loop, or move elsewhere.
+    var map = [];
+
+    for(var i = 0; i < nwidth*2; i++){
+        map[i]=[]; 
+        for(var j = 0; j < nheight*2; j++){
+            if(i%2 == 1 || j % 2 == 1){
+                map[i][j] = true;
+            }else{
+                map[i][j] = false;
+            }
+        }
+    }
+
+
+    for(var i = 0; i < edges.length; i++){
+        //An edge looks like this: [[0,1],[0,2]]
+        var currentEdge = edges[i];
+        var dx = currentEdge[1][0] - currentEdge[0][0];
+        var dy = currentEdge[1][1] - currentEdge[0][1];
+        var ix = currentEdge[0][0]*2 + dx;
+        var iy = currentEdge[0][1]*2 + dy;
+        if(DEBUG)
+            console.log("Accessing map " + ix +"" + iy);
+        map[ix][iy] = false;
+    }
+
+    return map;
+}
+
+
+Maze.prototype.generatePatternFor = function(coord) {
+    var top_pattern    = this.getPatternAt(coord.top());
+    var right_pattern  = this.getPatternAt(coord.right());
+    var bottom_pattern = this.getPatternAt(coord.bottom());
+    var left_pattern   = this.getPatternAt(coord.left());
+
+    var top_exists    = top_pattern    ? true : false;
+    var right_exists  = right_pattern  ? true : false;
+    var bottom_exists = bottom_pattern ? true : false;
+    var left_exists   = left_pattern   ? true : false;
+
+    var connections = 0;
+
+    var top_connected    = top_exists    ? top_pattern.bottom : false;
+    if (top_connected) connections++;
+
+    var right_connected  = right_exists  ? right_pattern.left : false;
+    if (right_connected) connections++;
+
+    var bottom_connected = bottom_exists ? bottom_pattern.top : false;
+    if (bottom_connected) connections++;
+
+    var left_connected   = left_exists   ? left_pattern.right : false;
+    if (left_connected) connections++;
+
+    var connection_chances = World.CONNECTION_CHANCES.slice(0, 4 - connections);
+
+    var new_connections = 0;
+
+    var top_function = function() {
+        if (!top_exists || top_connected) {
+            top_connected = top_connected || Math.roll(connection_chances[new_connections]);
+            new_connections++;
+        }
+    }
+
+    var right_function = function() {
+        if (!right_exists || right_connected) {
+            right_connected = right_connected || Math.roll(connection_chances[new_connections]);
+            new_connections++;
+        }
+    }
+
+    var bottom_function = function() {
+        if (!bottom_exists | bottom_connected) {
+            bottom_connected = bottom_connected || Math.roll(connection_chances[new_connections]);
+            new_connections++;
+        }
+    }
+
+    var left_function = function() {
+        if (!left_exists || left_connected) {
+            left_connected = left_connected || Math.roll(connection_chances[new_connections]);
+            new_connections++;
+        }
+    }
+
+    var connection_functions = [top_function, right_function, bottom_function, left_function].shuffle();
+    for (var i = 0; i < 4; i++) {
+        connection_functions[i].call();
+    }
+
+    var pattern = new Pattern({top:top_connected, right:right_connected, bottom:bottom_connected, left:left_connected});
+
+    if (!this.patternsMatrix[coord.row]) {
+        this.patternsMatrix[coord.row] = {};
+    }
+
+    this.patternsMatrix[coord.row][coord.col] = pattern;
+    return pattern;
+};

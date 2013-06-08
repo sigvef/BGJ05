@@ -24,8 +24,8 @@ GameState.prototype.resume = function(){
 
 GameState.prototype.render = function(ctx){
     
-    this.darkvas.width = 16*GU;
-    this.darkvas.height = 9*GU;
+    this.darkvas.width = 16*GU+GU;
+    this.darkvas.height = 9*GU+GU;
 
     var viewport = {
         x: this.player.x - 8,
@@ -38,7 +38,7 @@ GameState.prototype.render = function(ctx){
 
 
     this.darkctx.fillStyle = 'black';
-    this.darkctx.fillRect(0, 0, 16*GU, 9*GU);
+    this.darkctx.fillRect(0, 0, 16*GU+GU, 9*GU+GU);
 
     this.maze.render(ctx, viewport);
 
@@ -49,7 +49,7 @@ GameState.prototype.render = function(ctx){
 
     ctx.save();
     ctx.globalAlpha = 0.98;
-    ctx.drawImage(this.darkvas, viewport.x*GU, viewport.y*GU);
+    ctx.drawImage(this.darkvas, viewport.x*GU-0.5*GU, viewport.y*GU-0.5*GU);
     ctx.restore();
 
     

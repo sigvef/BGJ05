@@ -22,6 +22,7 @@ LightBomb.prototype.render_light = function(darkctx, viewport){
     if(this.planted_time + this.duration_in_ms <= t){
         LightBomb.canvas.width = darkctx.canvas.width;
         LightBomb.canvas.height = darkctx.canvas.height;
+        LightBomb.ctx.translate(Math.floor(-viewport.x*GU), Math.floor(-viewport.y*GU));
         LightBomb.ctx.fillStyle = 'rgba(255,255,255,' + square_interpolation(1, 0, 1 - (t - this.planted_time - this.duration_in_ms)/LightBomb.ALIVE_TIME_IN_MS) + ')';
         LightBomb.ctx.beginPath();
         LightBomb.ctx.arc(this.x*GU, this.y*GU, (t - this.planted_time - this.duration_in_ms)/1000*GU, 0, 2 * Math.PI, false);
@@ -34,7 +35,7 @@ LightBomb.prototype.render_light = function(darkctx, viewport){
         LightBomb.ctx.fill();
 
         darkctx.globalCompositeOperation = 'destination-out';
-        darkctx.drawImage(LightBomb.canvas, -viewport.x*GU, -viewport.y*GU);
+        darkctx.drawImage(LightBomb.canvas,0,0);// -viewport.x*GU, -viewport.y*GU);
     }
 
 }
