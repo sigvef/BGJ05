@@ -70,6 +70,7 @@ GameState = (function(){
 
     GameState.prototype.addPlayer = function(player){
         player.id = this.player_id_counter++; 
+        player.color = {r: Math.random()*256|0, g: Math.random()*256|0, b: Math.random()*256|0};
         this.players[player.id] = player;
     }
 

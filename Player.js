@@ -5,6 +5,8 @@ function Player(game, params){
 
     this.game = game;
 
+    this.color = params.color || {r:255, g:255, b: 255};
+
     this.nickname = params.name || "";
     
     this.socket;
@@ -96,12 +98,12 @@ Player.prototype.update = function(){
 
 
 Player.prototype.render = function(ctx){
-    ctx.fillStyle = 'red';
+    ctx.fillStyle = 'rgb(' + this.color.r + ',' + this.color.g + ',' + this.color.b + ')';
     ctx.fillRect(this.x*GU, this.y*GU, GU*0.2, GU*0.2); 
 }
 
 Player.prototype.serialize = function(){
-    return {id: this.id, name: this.name, x: this.x, y: this.y, dx: this.dx, dy: this.dy};
+    return {id: this.id, name: this.name, x: this.x, y: this.y, dx: this.dx, dy: this.dy, color: this.color};
 }
 
 return Player;
