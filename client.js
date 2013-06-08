@@ -123,7 +123,7 @@ function client(){
         });
 
         socket.on('remove player', function (id) {
-            console.log('player connected', id);
+            console.log('player disconnected', id);
             game.removePlayer(id);
         });
     };

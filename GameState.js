@@ -73,8 +73,8 @@ GameState.prototype.addPlayer = function(player){
     this.players[player.id] = player;
 }
 
-GameState.prototype.removePlayer = function(player){
-    delete this.players[player.id];
+GameState.prototype.removePlayer = function(id){
+    delete this.players[id];
 }
 
 GameState.prototype.placeBomb = function(x,y,duration){

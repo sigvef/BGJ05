@@ -20,6 +20,7 @@ function sendEntireMaze(socket){
     socket.emit('maze', game.maze.internal);
 }
 
+
 io.sockets.on('connection', function (socket) {
 
     console.log('We got a connection!');
