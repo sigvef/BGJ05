@@ -66,6 +66,7 @@ GameState = (function(){
             this.bombs[i] = bomb;
        }
     }
+    
 
     GameState.prototype.addPlayer = function(player){
         player.id = this.player_id_counter++; 

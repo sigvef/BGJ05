@@ -3,17 +3,32 @@ function Maze(){
     /* internal is some internal representation of the maze,
        either a graph or an array of cells or whatever is best */
     this.internal = this.generate(16,9);
+    blockSize = 0.5*GU;
+    try{
+    this.hedgeImage = new Image();
+    this.hedgeImage.src = "hedge.png";
+    }catch(e){}
 }
 
 Maze.prototype.render = function(ctx, x, y, w, h){
     for(var nx = 0; nx < this.internal.length; nx++){
         for(var ny = 0; ny < this.internal[0].length; ny++){
-            ctx.fillStyle = this.internal[nx][ny] ?  "#000000" : "#FFFFFF" ;
-            ctx.fillRect(x+nx*GU*0.5,y+ny*GU*0.5,GU*0.5,GU*0.5);
+            if(this.internal[nx][ny]){
+                //Hedge
+                ctx.drawImage(this.hedgeImage, x+nx*blockSize,y+ny*blockSize,blockSize,blockSize);
+            }else{
+                //Walkable
+                ctx.fillStyle ="#FFFFFF" ;
+                ctx.fillRect(x+nx*blockSize,y+ny*blockSize,blockSize,blockSize);
+            }
+
         }
     }
 }
 
+Maze.prototype.collide = function(x, y){
+    return this.internal[Math.floor(GU*x/blockSize)][Math.floor(GU*y/blockSize)];
+}
 
 /* init this.internal if n is undefined, else grow internal by n */
 Maze.prototype.generate = function(nwidth, nheight){
@@ -33,7 +48,7 @@ Maze.prototype.generate = function(nwidth, nheight){
             for(var j = -1; j < 2 && !added; j++){
                 var x = i+currentNode[0];
                 var y = j+currentNode[1];
-                if(x<0 || y<0 || x > nwidth || y > nheight || i*j != 0) continue;
+                if(x<0 || y<0 || x >= nwidth || y >= nheight || i*j != 0) continue;
 
                 var newNode = [x,y];
                 
@@ -60,7 +75,7 @@ Maze.prototype.generate = function(nwidth, nheight){
     //TODO: Integrate in main loop, or move elsewhere.
     var map = [];
 
-    for(var i = 0; i < nwidth*2+1; i++){
+    for(var i = 0; i < nwidth*2; i++){
         map[i]=[]; 
         for(var j = 0; j < nheight*2; j++){
             if(i%2 == 1 || j % 2 == 1){

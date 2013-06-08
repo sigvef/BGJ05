@@ -2,6 +2,7 @@ var io = require('socket.io').listen(8000);
 var GameState = require('./GameState');
 var Player = require('./Player');
 var LightBomb = require('./LightBomb');
+GU = 1;
 
 var game = new GameState();
 game.resume();

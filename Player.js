@@ -62,11 +62,32 @@ Player.prototype.update = function(){
         this.dx = this.dx / speed;
         this.dy = this.dy / speed;
     }
+    var lastx = this.x;
+    var lasty = this.y;
 
     this.x += this.dx * Player.SPEED;
     this.y += this.dy * Player.SPEED;
     this.dx *= Player.FRICTION;
     this.dy *= Player.FRICTION;
+
+    if(this.game.maze.collide(this.x,this.y) == true){
+        //collision in x direction
+        if(this.game.maze.collide(this.x,lasty) == true){
+            this.x = lastx;
+            this.dx = 0;
+            console.log("hit x");
+
+        }
+
+        //collision in y direction
+        if(this.game.maze.collide(lastx,this.y) == true){
+            this.y = lasty;
+            this.dy = 0;
+            console.log("hit y");
+
+        }
+
+    }
 
     if(this.bomb_place_cooldown > 0){
         this.bomb_place_cooldown--;
