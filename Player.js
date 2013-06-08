@@ -4,6 +4,7 @@ function Player(x,y){
     this.dx = 0;
     this.dy = 0;
     this.playerSize = 0.5;
+    this.hitBox = 0.15;
 
     this.bomb_place_cooldown = Player.BOMB_PLACE_COOLDOWN;
     
@@ -52,17 +53,29 @@ Player.prototype.update = function(){
     this.dx *= Player.FRICTION;
     this.dy *= Player.FRICTION;
 
-    if(this.x <= 0 || sm.activeState.maze.collide(this.x,this.y) == true){
+    if(this.x <= 0 || sm.activeState.maze.collide(this.x+this.hitBox,this.y+this.hitBox) == true
+            || sm.activeState.maze.collide(this.x+this.hitBox,this.y-this.hitBox) == true
+            || sm.activeState.maze.collide(this.x-this.hitBox,this.y+this.hitBox) == true
+            || sm.activeState.maze.collide(this.x-this.hitBox,this.y-this.hitBox) == true
+            ){
+
         //collision in x direction
-        if(this.x <= 0 ||  sm.activeState.maze.collide(this.x,lasty) == true){
+        if(this.x <= 0 ||  sm.activeState.maze.collide(this.x+this.hitBox,lasty+this.hitBox) == true 
+                || sm.activeState.maze.collide(this.x+this.hitBox,lasty-this.hitBox)== true
+                || sm.activeState.maze.collide(this.x-this.hitBox,lasty+this.hitBox)== true
+                || sm.activeState.maze.collide(this.x-this.hitBox,lasty-this.hitBox)== true
+                ){
             this.x = lastx;
             this.dx = 0;
             console.log("hit x");
-
         }
 
         //collision in y direction
-        if(sm.activeState.maze.collide(lastx,this.y) == true){
+        if(sm.activeState.maze.collide(lastx+this.hitBox,this.y+this.hitBox) == true
+                || sm.activeState.maze.collide(lastx+this.hitBox,this.y-this.hitBox) == true
+                || sm.activeState.maze.collide(lastx-this.hitBox,this.y+this.hitBox) == true
+                || sm.activeState.maze.collide(lastx-this.hitBox,this.y-this.hitBox) == true
+                ){
             this.y = lasty;
             this.dy = 0;
             console.log("hit y");

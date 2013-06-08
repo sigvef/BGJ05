@@ -19,7 +19,7 @@ GameState.prototype.pause = function(){
 
 GameState.prototype.resume = function(){
     this.maze = new Maze();
-    this.player = new Player(1,1);
+    this.player = new Player(0.25,0.25);
 }
 
 GameState.prototype.render = function(ctx){
