@@ -28,7 +28,12 @@ Maze.prototype.render = function(ctx, x, y, w, h){
 
 Maze.prototype.collide = function(x, y){
     var blockSize = this.ratioBlockGU*GU;
-    return this.internal[Math.floor(GU*x/blockSize)][Math.floor(GU*y/blockSize)];
+    var nx = Math.floor(GU*x/blockSize);
+    var ny = Math.floor(GU*y/blockSize);
+    console.log("Coords: " + nx + " " + ny);
+    if(this.internal[nx] == undefined)
+        return true;
+    return this.internal[nx][ny];
 }
 
 /* init this.internal if n is undefined, else grow internal by n */
