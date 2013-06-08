@@ -86,3 +86,7 @@ Maze.prototype.generate = function(nwidth, nheight){
 
     return map;
 }
+
+try{
+    module.exports = Maze;
+}catch(e){}
