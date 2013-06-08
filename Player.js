@@ -3,6 +3,7 @@ function Player(x,y){
     this.y = y || 0;
     this.dx = 0;
     this.dy = 0;
+    this.playerSize = 0.5;
 
     this.bomb_place_cooldown = Player.BOMB_PLACE_COOLDOWN;
     
@@ -76,6 +77,6 @@ Player.prototype.update = function(){
 
 
 Player.prototype.render = function(ctx){
-    ctx.drawImage(this.personfront, this.x*GU, this.y*GU, GU*0.5, GU*0.5); 
+    ctx.drawImage(this.personfront, this.x*GU-GU*this.playerSize/2, this.y*GU-GU*this.playerSize/2, GU*this.playerSize,GU*this.playerSize); 
 }
 
