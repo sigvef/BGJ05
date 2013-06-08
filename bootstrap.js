@@ -51,6 +51,11 @@ function bootstrap(){
     KEYS = [];
     KEYS.ESC = 27;
     KEYS.SPACE = 32;
+    KEYS.UP = 38;
+    KEYS.DOWN = 40;
+    KEYS.LEFT = 37;
+    KEYS.RIGHT = 39;
+
     for(var i=0;i<256;i++){
         KEYS[i] = false;
     }

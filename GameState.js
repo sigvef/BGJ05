@@ -1,5 +1,6 @@
 function GameState(){
     this.maze;
+    this.player;
 }
 
 GameState.prototype.init = function(){
@@ -10,6 +11,7 @@ GameState.prototype.pause = function(){
 
 GameState.prototype.resume = function(){
     this.maze = new Maze();
+    this.player = new Player(1,1);
 }
 
 GameState.prototype.render = function(ctx){
@@ -21,10 +23,12 @@ GameState.prototype.render = function(ctx){
     ctx.fillText('press esc to leave', 1*GU, 7*GU);
 
     this.maze.render(ctx, 0, 0, 16, 9);
+    this.player.render(ctx);
 }
 
 GameState.prototype.update = function(){
     if(KEYS[KEYS.ESC]){
         sm.changeState('mainmenu'); 
     }
+    this.player.update();
 }
