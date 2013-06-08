@@ -5,7 +5,7 @@ function Maze(){
     this.patternsMatrix = {};
     this.cells = {};
     this.internal = this.generate(16,9);
-    blockSize = 0.3;
+    blockSize = 0.5;
     this.hedgeImage = new Image();
     this.groundImage = new Image();
     this.hedgeImage.src = "hedge.png";
