@@ -3,11 +3,29 @@ function Player(x,y){
     this.y = y || 0;
     this.dx = 0;
     this.dy = 0;
+    this.playerSize = 0.5;
+    this.hitBox = 0.15;
 
     this.bomb_place_cooldown = Player.BOMB_PLACE_COOLDOWN;
     
     this.personfront = new Image();
     this.personfront.src = "personfront.png";
+    
+    this.personback = new Image();
+    this.personback.src = "personback.png";
+    
+    this.personside = new Image();
+    this.personside.src = "personside.png";
+        
+    this.personleft = new Image();
+    this.personleft.src = "personleft.png";
+    
+    this.personimages = {"down": this.personfront, "up": this.personback,
+    					 "right": this.personside, "left": this.personleft};
+    					 
+    this.personDirection = "down";
+    
+    
 }
 
 Player.BOMB_PLACE_COOLDOWN = 10;
@@ -18,18 +36,22 @@ Player.prototype.update = function(){
 
     if(KEYS[KEYS.LEFT]){
         this.dx = -1;
+        this.personDirection = "left";
     }
 
     if(KEYS[KEYS.RIGHT]){
         this.dx = 1;
+        this.personDirection = "right";
     }
 
     if(KEYS[KEYS.UP]){
         this.dy = -1;
+        this.personDirection =  "up";
     }
 
     if(KEYS[KEYS.DOWN]){
         this.dy = 1;
+        this.personDirection = "down";
     }
 
     if(KEYS[KEYS.SPACE] && this.bomb_place_cooldown == 0){
@@ -51,23 +73,34 @@ Player.prototype.update = function(){
     this.dx *= Player.FRICTION;
     this.dy *= Player.FRICTION;
 
-    if(sm.activeState.maze.collide(this.x,this.y) == true){
+    if(this.x <= 0 || sm.activeState.maze.collide(this.x+this.hitBox,this.y+this.hitBox) == true
+            || sm.activeState.maze.collide(this.x+this.hitBox,this.y-this.hitBox) == true
+            || sm.activeState.maze.collide(this.x-this.hitBox,this.y+this.hitBox) == true
+            || sm.activeState.maze.collide(this.x-this.hitBox,this.y-this.hitBox) == true
+            ){
+
         //collision in x direction
-        if(sm.activeState.maze.collide(this.x,lasty) == true){
+        if(this.x <= 0 ||  sm.activeState.maze.collide(this.x+this.hitBox,lasty+this.hitBox) == true 
+                || sm.activeState.maze.collide(this.x+this.hitBox,lasty-this.hitBox)== true
+                || sm.activeState.maze.collide(this.x-this.hitBox,lasty+this.hitBox)== true
+                || sm.activeState.maze.collide(this.x-this.hitBox,lasty-this.hitBox)== true
+                ){
             this.x = lastx;
             this.dx = 0;
             console.log("hit x");
-
         }
 
         //collision in y direction
-        if(sm.activeState.maze.collide(lastx,this.y) == true){
+        if(sm.activeState.maze.collide(lastx+this.hitBox,this.y+this.hitBox) == true
+                || sm.activeState.maze.collide(lastx+this.hitBox,this.y-this.hitBox) == true
+                || sm.activeState.maze.collide(lastx-this.hitBox,this.y+this.hitBox) == true
+                || sm.activeState.maze.collide(lastx-this.hitBox,this.y-this.hitBox) == true
+                ){
             this.y = lasty;
             this.dy = 0;
             console.log("hit y");
 
         }
-
     }
 
     if(this.bomb_place_cooldown > 0){
@@ -77,6 +110,7 @@ Player.prototype.update = function(){
 
 
 Player.prototype.render = function(ctx){
-    ctx.drawImage(this.personfront, this.x*GU, this.y*GU, GU*0.5, GU*0.5); 
+    ctx.drawImage(this.personimages[this.personDirection], this.x*GU-GU*this.playerSize/2, 
+        this.y*GU-GU*this.playerSize/2, GU*this.playerSize,GU*this.playerSize); 
 }
 

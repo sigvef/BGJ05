@@ -18,7 +18,6 @@ Maze.prototype.render = function(ctx, viewport){
 
     var startRow = Math.ceil(viewport.y / blockSize) - 1;
     var startCol = Math.ceil(viewport.x / blockSize) - 1;
-
     var rows = Math.ceil(viewport.height / blockSize) + 1;
     var cols = Math.ceil(viewport.width / blockSize) + 1;
 
@@ -43,7 +42,13 @@ Maze.prototype.render = function(ctx, viewport){
 
 Maze.prototype.collide = function(x, y){
     return false;
-    return this.internal[Math.floor(GU*x/blockSize)][Math.floor(GU*y/blockSize)];
+    var blockSize = this.ratioBlockGU*GU;
+    var nx = Math.floor(GU*x/blockSize);
+    var ny = Math.floor(GU*y/blockSize);
+    console.log("Coords: " + nx + " " + ny);
+    if(this.internal[nx] == undefined)
+        return true;
+    return this.internal[nx][ny];
 }
 
 /* init this.internal if n is undefined, else grow internal by n */
