@@ -4,7 +4,7 @@ function Player(x,y){
     this.dx = 0;
     this.dy = 0;
     this.playerSize = 0.5;
-    this.hitBox = 0.15;
+    this.hitBox = 0;//.15;
 
     this.bomb_place_cooldown = Player.BOMB_PLACE_COOLDOWN;
     
