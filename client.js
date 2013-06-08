@@ -49,7 +49,7 @@ function loop(){
     requestAnimFrame(loop);
 }
 
-function bootstrap(){
+function client(){
 
     /* global on purpose */
     canvas = document.createElement("canvas");
@@ -67,8 +67,9 @@ function bootstrap(){
 
     /* add game states here */
     
-    //sm.addState("mainmenu", new MainMenuState());
-    sm.addState("game", new GameState("not sure what this argument was supposed to be", "but this should definately be here!"));
+    var game =  new GameState("not sure what this argument was supposed to be", "but this should definately be here!");
+    sm.addState("mainmenu", new MainMenuState());
+    sm.addState("game", game);
 
     resize();
 
@@ -76,55 +77,57 @@ function bootstrap(){
 
     /* start the game */
 
-    sm.changeState("game");
-    var  game = sm.activeState;
+    sm.changeState("mainmenu");
 
     console.log("bootstrapping loaded");
 
-    socket = io.connect('http://localhost:8000');
+    game.connect = function(url){
+        socket = io.connect('http://localhost:8000');
 
-    document.addEventListener('keydown', function(e){
-        socket.emit('keydown', e.keyCode);
-    });
+        document.addEventListener('keydown', function(e){
+            socket.emit('keydown', e.keyCode);
+        });
 
-    document.addEventListener('keyup', function(e){
-        socket.emit('keyup', e.keyCode);
-    });
+        document.addEventListener('keyup', function(e){
+            socket.emit('keyup', e.keyCode);
+        });
 
-    socket.on('connecting', function () {
-        console.log("trying to connect...");
-    });
+        socket.on('connecting', function () {
+            console.log("trying to connect...");
+        });
 
-    socket.on('connect', function() {
-        console.log("Connected!");
-    });
+        socket.on('connect', function() {
+            console.log("Connected!");
+        });
 
-    socket.on('id', function(id){
-        SELF_ID = id;
-    });
+        socket.on('id', function(id){
+            SELF_ID = id;
+        });
 
-    socket.on('keyframe', function(keyframe){
-        game.loadKeyframe(keyframe);
-    });
+        socket.on('keyframe', function(keyframe){
+            game.loadKeyframe(keyframe);
+        });
 
-    socket.on('frame', function(frame){
-        game.loadFrame(eyframe);
-    });
+        socket.on('frame', function(frame){
+            game.loadFrame(eyframe);
+        });
 
-    socket.on('maze', function(maze){
-        console.log("GOT MAZE");
-        game.maze.internal = maze;
-    });
+        socket.on('maze', function(maze){
+            console.log("GOT MAZE");
+            game.maze.internal = maze;
+        });
 
-    socket.on('add player', function (id) {
-        console.log('player connected', id);
-        game.addPlayer(new Player(id));
-    });
+        socket.on('add player', function (id) {
+            console.log('player connected', id);
+            game.addPlayer(new Player(id));
+        });
 
-    socket.on('remove player', function (id) {
-        console.log('player connected', id);
-        game.removePlayer(id);
-    });
+        socket.on('remove player', function (id) {
+            console.log('player connected', id);
+            game.removePlayer(id);
+        });
+    };
+
 
 
     requestAnimFrame(loop);
