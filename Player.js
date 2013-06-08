@@ -26,6 +26,13 @@ function Player(game, params){
     this.KEYS.LEFT = 37;
     this.KEYS.RIGHT = 39;
 
+    this.playerSize = 0.5;
+
+    try{
+    this.personfront = new Image();
+    this.personfront.src = "personfront.png";
+    }catch(e){}
+
     for(var i=0;i<256;i++){
         this.KEYS[i] = false;
     }
@@ -72,9 +79,9 @@ Player.prototype.update = function(){
     this.dx *= Player.FRICTION;
     this.dy *= Player.FRICTION;
 
-    if(this.game.maze.collide(this.x,this.y) == true){
+    if(this.x <= 0 || this.game.maze.collide(this.x,this.y) == true){
         //collision in x direction
-        if(this.game.maze.collide(this.x,lasty) == true){
+        if(this.x <= 0 ||  this.game.maze.collide(this.x,lasty) == true){
             this.x = lastx;
             this.dx = 0;
             console.log("hit x");
@@ -88,7 +95,6 @@ Player.prototype.update = function(){
             console.log("hit y");
 
         }
-
     }
 
     if(this.bomb_place_cooldown > 0){
@@ -98,8 +104,7 @@ Player.prototype.update = function(){
 
 
 Player.prototype.render = function(ctx){
-    ctx.fillStyle = 'rgb(' + this.color.r + ',' + this.color.g + ',' + this.color.b + ')';
-    ctx.fillRect(this.x*GU, this.y*GU, GU*0.2, GU*0.2); 
+    ctx.drawImage(this.personfront, this.x*GU-GU*this.playerSize/2, this.y*GU-GU*this.playerSize/2, GU*this.playerSize,GU*this.playerSize); 
 }
 
 Player.prototype.serialize = function(){
