@@ -5,50 +5,68 @@ function Maze(){
     this.patternsMatrix = {};
     this.cells = {};
     this.internal = this.generate(16,9);
-    blockSize = 0.3;
+    blockSize = 0.5*GU;
     this.hedgeImage = new Image();
-    this.groundImage = new Image();
     this.hedgeImage.src = "hedge.png";
-    this.groundImage.src = "ground.png";
-    this.renderer = new LevelRenderer(); 
-
 }
 
-Maze.prototype.render = function(ctx, viewport){
+Maze.prototype.render = function(ctx, x, y, w, h){
+    for(var nx = 0; nx < this.internal.length; nx++){
+        for(var ny = 0; ny < this.internal[0].length; ny++){
+            if(this.internal[nx][ny]){
+                //Hedge
+                ctx.drawImage(this.hedgeImage, x+nx*blockSize,y+ny*blockSize,blockSize,blockSize);
+            }else{
+                //Walkable
+                ctx.fillStyle ="#FFFFFF" ;
+                ctx.fillRect(x+nx*blockSize,y+ny*blockSize,blockSize,blockSize);
+            }
 
-    var startRow = Math.ceil(viewport.y / blockSize) - 1;
-    var startCol = Math.ceil(viewport.x / blockSize) - 1;
-    var rows = Math.ceil(viewport.height / blockSize) + 1;
-    var cols = Math.ceil(viewport.width / blockSize) + 1;
-
-    for (var row = 0; row < rows; ++row) {
-        for (var col = 0; col < cols; ++col) {
-            this.renderer.renderTile(startRow + row, startCol + col, this, ctx);
         }
     }
-    /*for(var nx = 0; nx < this.internal.length; nx++){
-      for(var ny = 0; ny < this.internal[0].length; ny++){
-      if(this.internal[nx][ny]){
-    //Hedge
-    ctx.drawImage(this.hedgeImage, x+nx*blockSize,y+ny*blockSize,blockSize,blockSize);
-    }else{
-    //Ground
-    ctx.drawImage(this.groundImage, x+nx*blockSize,y+ny*blockSize,blockSize,blockSize);
-    }
-
-    }
-    }*/
 }
 
 Maze.prototype.collide = function(x, y){
-    return false;
-    var blockSize = this.ratioBlockGU*GU;
-    var nx = Math.floor(GU*x/blockSize);
-    var ny = Math.floor(GU*y/blockSize);
-    if(this.internal[nx] == undefined)
-        return true;
-    return this.internal[nx][ny];
+    return this.internal[x/blockSize|0][y/blockSize|0];
 }
+
+
+World.prototype.getPatternAt = function(coord) {
+    if (!this.patternsMatrix[coord.row] || ! this.patternsMatrix[coord.row][coord.col]) {
+        return null;
+    }
+    return this.patternsMatrix[coord.row][coord.col];
+};
+
+World.prototype.cellExists = function(global_row, global_col) {
+    return this.cells[global_row] && this.cells[global_row][global_col];
+};
+
+World.prototype.addCellAt = function(cell, global_row, global_col) {
+    if (!this.cells[global_row]) {
+        this.cells[global_row] = {};
+    }
+    this.cells[global_row][global_col] = cell;
+};
+
+World.prototype.getCellAt = function(global_row, global_col) {
+    if (!this.cellExists(global_row, global_col)) {
+        var pattern_coord = Pattern.translateGlobalToPattern(global_row, global_col);
+        pattern = this.generatePatternFor(pattern_coord);
+        this.checkDogCreationAt(pattern_coord);
+
+        for (var internal_row = 0; internal_row < 3; internal_row++) {
+            for (var internal_col = 0; internal_col < 3; internal_col++) {
+                this.addCellAt(pattern.internalCellAt(internal_row, internal_col), pattern_coord.row * 3 + internal_row, pattern_coord.col * 3 + internal_col);
+            }
+        }
+    }
+    return this.cells[global_row][global_col];
+};
+
+World.CONNECTION_CHANCES = [1,  1,  0.025, 0.001];
+
+
 
 /* init this.internal if n is undefined, else grow internal by n */
 Maze.prototype.generate = function(nwidth, nheight){
@@ -122,40 +140,6 @@ Maze.prototype.generate = function(nwidth, nheight){
     return map;
 }
 
-Maze.prototype.getPatternAt = function(coord) {
-    if (!this.patternsMatrix[coord.row] || ! this.patternsMatrix[coord.row][coord.col]) {
-        return null;
-    }
-    return this.patternsMatrix[coord.row][coord.col];
-};
-
-Maze.prototype.cellExists = function(global_row, global_col) {
-    return this.cells[global_row] && this.cells[global_row][global_col];
-};
-
-Maze.prototype.addCellAt = function(cell, global_row, global_col) {
-    if (!this.cells[global_row]) {
-        this.cells[global_row] = {};
-    }
-    this.cells[global_row][global_col] = cell;
-};
-
-Maze.prototype.getCellAt = function(global_row, global_col) {
-    if (!this.cellExists(global_row, global_col)) {
-        var pattern_coord = Pattern.translateGlobalToPattern(global_row, global_col);
-        pattern = this.generatePatternFor(pattern_coord);
-
-        for (var internal_row = 0; internal_row < 3; internal_row++) {
-            for (var internal_col = 0; internal_col < 3; internal_col++) {
-                this.addCellAt(pattern.internalCellAt(internal_row, internal_col), pattern_coord.row * 3 + internal_row, pattern_coord.col * 3 + internal_col);
-            }
-        }
-    }
-    return this.cells[global_row][global_col];
-};
-
-Maze.CONNECTION_CHANCES = [1,  1,  0.025, 0.001];
-
 
 Maze.prototype.generatePatternFor = function(coord) {
     var top_pattern    = this.getPatternAt(coord.top());
@@ -182,7 +166,7 @@ Maze.prototype.generatePatternFor = function(coord) {
     var left_connected   = left_exists   ? left_pattern.right : false;
     if (left_connected) connections++;
 
-    var connection_chances = Maze.CONNECTION_CHANCES.slice(0, 4 - connections);
+    var connection_chances = World.CONNECTION_CHANCES.slice(0, 4 - connections);
 
     var new_connections = 0;
 
@@ -214,7 +198,7 @@ Maze.prototype.generatePatternFor = function(coord) {
         }
     }
 
-    var connection_functions = shuffle([top_function, right_function, bottom_function, left_function]);
+    var connection_functions = [top_function, right_function, bottom_function, left_function].shuffle();
     for (var i = 0; i < 4; i++) {
         connection_functions[i].call();
     }
@@ -228,11 +212,3 @@ Maze.prototype.generatePatternFor = function(coord) {
     this.patternsMatrix[coord.row][coord.col] = pattern;
     return pattern;
 };
-
-Maze.prototype.renderTile = function(row, col, world, context){
-        if (!([row,col] in this.tileRenderers)) {
-                this.tileRenderers[[row,col]] = new TileRenderer(row, col, world, context, this);
-                    }
-        this.tileRenderers[[row,col]].render(row, col);
-};
-

@@ -26,22 +26,33 @@ GameState.prototype.resume = function(){
 
 GameState.prototype.render = function(ctx){
     
-    this.darkvas.width = 16*GU;
-    this.darkvas.height = 9*GU;
+    this.darkvas.width = 16*GU+GU;
+    this.darkvas.height = 9*GU+GU;
+
+    var viewport = {
+        x: this.player.x - 8,
+        y: this.player.y - 4.5,
+        width: 16,
+        height: 9 
+    };
+    
+    ctx.translate(Math.floor(-viewport.x*GU), Math.floor(-viewport.y*GU));
+
 
     this.darkctx.fillStyle = 'black';
-    this.darkctx.fillRect(0,0, 16*GU, 9*GU);
+    this.darkctx.fillRect(0, 0, 16*GU+GU, 9*GU+GU);
 
-    this.maze.render(ctx, 0, 0, 16, 9);
+    this.maze.render(ctx, viewport);
+
     this.player.render(ctx);
     this.firefly.render(ctx);
     for(var i=0;i<this.bombs.length;i++){
-        this.bombs[i].render_light(this.darkctx);
+        this.bombs[i].render_light(this.darkctx, viewport);
     }
 
     ctx.save();
     ctx.globalAlpha = 0.98;
-    //ctx.drawImage(this.darkvas, 0, 0);
+    ctx.drawImage(this.darkvas, viewport.x*GU-0.5*GU, viewport.y*GU-0.5*GU);
     ctx.restore();
 
     
