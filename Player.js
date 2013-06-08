@@ -13,13 +13,15 @@ function Player(x,y){
     this.personback.src = "personback.png";
     
     this.personside = new Image();
-    this.personside.scr = "personside.png";
-    
+    this.personside.src = "personside.png";
         
-    this.personside = new Image();
-    this.personside.scr = "personleft.png";
+    this.personleft = new Image();
+    this.personleft.src = "personleft.png";
     
-    this.personimages = {"down": this.personfront, "up": this.personback: "right": this.personside, "left": this.personleft}
+    this.personimages = {"down": this.personfront, "up": this.personback,
+    					 "right": this.personside, "left": this.personleft};
+    					 
+    this.personDirection = "down";
     
     
 }
@@ -32,18 +34,22 @@ Player.prototype.update = function(){
 
     if(KEYS[KEYS.LEFT]){
         this.dx = -1;
+        this.personDirection = "left";
     }
 
     if(KEYS[KEYS.RIGHT]){
         this.dx = 1;
+        this.personDirection = "right";
     }
 
     if(KEYS[KEYS.UP]){
         this.dy = -1;
+        this.personDirection =  "up";
     }
 
     if(KEYS[KEYS.DOWN]){
         this.dy = 1;
+        this.personDirection = "down";
     }
 
     if(KEYS[KEYS.SPACE] && this.bomb_place_cooldown == 0){
@@ -91,6 +97,6 @@ Player.prototype.update = function(){
 
 
 Player.prototype.render = function(ctx){
-    ctx.drawImage(this.personfront, this.x*GU, this.y*GU, GU*0.5, GU*0.5); 
+    ctx.drawImage(this.personimages[this.personDirection], this.x*GU, this.y*GU, GU*0.5, GU*0.5); 
 }
 
