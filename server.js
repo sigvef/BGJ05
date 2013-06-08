@@ -5,7 +5,6 @@ var LightBomb = require('./LightBomb');
 GU = 1;
 
 var game = new GameState();
-game.resume();
 
 
 function sendKeyframe(socket){
@@ -21,9 +20,11 @@ function sendEntireMaze(socket){
 }
 
 
+
 io.sockets.on('connection', function (socket) {
 
     console.log('We got a connection!');
+
 
     var player = new Player(game, {});
     player.socket = socket;
@@ -41,6 +42,10 @@ io.sockets.on('connection', function (socket) {
         player.KEYS[keyCode] = false;
     });
 
+    socket.on('set name', function(name){
+        player.name = name;
+    });
+
     socket.on('msg', function () {
     });
 
@@ -51,6 +56,7 @@ io.sockets.on('connection', function (socket) {
     });
 });
 
+game.resume();
 
 old_time = +new Date();
 dt = 0;
@@ -78,3 +84,4 @@ Array.remove = function(array, from, to) {
   array.length = from < 0 ? array.length + from : from;
   return array.push.apply(array, rest);
 };
+

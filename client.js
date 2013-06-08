@@ -1,5 +1,7 @@
 missedGFXFrames = 0;
 
+SELF_NAME = ''
+
 /* smoothstep interpolaties between a and b, at time t from 0 to 1 */
 function smoothstep(a, b, t) {
     var v = t * t * (3 - 2 * t);
@@ -68,29 +70,33 @@ function client(){
     /* add game states here */
     
     var game =  new GameState("not sure what this argument was supposed to be", "but this should definately be here!");
-    sm.addState("mainmenu", new MainMenuState());
     sm.addState("game", game);
 
     resize();
 
     document.body.appendChild(canvas);
 
-    /* start the game */
 
-    sm.changeState("mainmenu");
-
-    console.log("bootstrapping loaded");
 
     game.connect = function(url){
+
+        console.log("doing a connect");
         socket = io.connect('http://localhost:8000');
 
-        document.addEventListener('keydown', function(e){
-            socket.emit('keydown', e.keyCode);
-        });
+        game.sendName = function(name){
+            socket.emit('set name', name);
+        }
 
-        document.addEventListener('keyup', function(e){
+        game.keydownGameListener = function(e){
+            if(e.keyCode == 27){
+                return game.showMenu();
+            }
+            socket.emit('keydown', e.keyCode);
+        }
+
+        game.keyupGameListener = function(e){
             socket.emit('keyup', e.keyCode);
-        });
+        }
 
         socket.on('connecting', function () {
             console.log("trying to connect...");
@@ -129,6 +135,9 @@ function client(){
     };
 
 
+    /* start the game */
+
+    sm.changeState("game");
 
     requestAnimFrame(loop);
 }

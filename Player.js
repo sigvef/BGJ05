@@ -7,7 +7,7 @@ function Player(game, params){
 
     this.color = params.color || {r:255, g:255, b: 255};
 
-    this.nickname = params.name || "";
+    this.name = params.name || "";
     
     this.socket;
 

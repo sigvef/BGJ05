@@ -3,22 +3,34 @@ try{
     var LightBomb = require('./LightBomb');
 }catch(e){}
 
-
 function GameState(socket, renderable){
     this.maze = {};
     this.players = {};
     this.bombs = [];
     this.player_id_counter = 1;
 
+    this.menu = false;
+
     this.renderable = renderable;
 
     if(this.renderable){
         this.darkvas = document.createElement('canvas');
         this.darkctx = this.darkvas.getContext('2d');
+        this.namefield = document.createElement('input');
+        this.titleImage = new Image();
+        this.titleImage.src = "title.png";
+    }
+
+    var that = this;
+    this.keydownMenuListener = function(e){
+        if(e.keyCode == 13) { //enter
+            that.hideMenu();
+        }
     }
 }
 
-GameState.prototype.createFrame = function(){
+
+this.createFrame = function(){
     var frame = {};
     for(var i in this.players){
         keyframe.players[i] = this.players[i].serialize();
@@ -97,6 +109,7 @@ GameState.prototype.resume = function(){
 GameState.prototype.render = function(ctx){
 
     if(this.renderable){
+
         this.darkvas.width = 16*GU;
         this.darkvas.height = 9*GU;
 
@@ -123,10 +136,58 @@ GameState.prototype.render = function(ctx){
         for(var i=0;i<this.bombs.length;i++){
             this.bombs[i].render(ctx);
         }
+
+        if(this.menu){
+            var padding = 0.5*GU;
+            var width = 8*GU;
+
+            /* TODO: put some of this in css */
+            this.namefield.style.position = 'fixed';
+            this.namefield.style.zIndex = 99999;
+            this.namefield.style.font = 1*GU + 'px Arial';
+            this.namefield.style.width = width + 'px';
+            this.namefield.style.height = 2*GU + 'px';
+            this.namefield.style.top = window.innerHeight/2 - padding/2 + 'px';
+            this.namefield.style.left = window.innerWidth/2 - width/2 - padding + 'px';
+            this.namefield.style.padding = padding + 'px';
+            this.namefield.style.border = '0';
+            this.namefield.style.background = 'rgba(0,0,0,0.8)';
+            this.namefield.style.color = 'white';
+            this.namefield.style.borderRadius = GU+'px';
+            this.namefield.placeholder = "Enter your name";
+
+            ctx.drawImage(this.titleImage, 0, 0, 16*GU, 9*GU);
+        }
     }
 }
 
+GameState.prototype.showMenu = function(){
+    document.addEventListener('keydown', this.keydownMenuListener);
+    document.body.appendChild(this.namefield);
+    this.namefield.focus();
+
+    document.removeEventListener('keydown', this.keydownGameListener);
+    document.removeEventListener('keyup', this.keyupGameListener);
+    this.menu = true;
+}
+
+GameState.prototype.hideMenu = function(){
+    console.log("HIDEMENU");
+    document.removeEventListener('keydown', this.keydownMenuListener);
+    document.addEventListener('keydown', this.keydownGameListener);
+    document.addEventListener('keyup', this.keyupGameListener);
+    document.body.removeChild(this.namefield);
+    SELF_NAME = this.namefield.value;
+    this.sendName(SELF_NAME);
+    this.menu = false;
+}
+
 GameState.prototype.update = function(){
+
+    if(this.renderable && !this.menu && !SELF_NAME){
+        this.showMenu();
+    }
+
     for(var i in this.players){
         this.players[i].update();
     }
