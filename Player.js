@@ -53,7 +53,7 @@ function Player(game, params){
     }catch(e){}
 }
 
-Player.BOMB_PLACE_COOLDOWN = 10;
+Player.BOMB_PLACE_COOLDOWN = 40;
 Player.FRICTION = 0.8;
 Player.SPEED = 0.08;
 
