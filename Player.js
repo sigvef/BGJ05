@@ -49,6 +49,7 @@ function Player(game, params){
     					 "right": this.personside, "left": this.personleft};
     					 
     this.personDirection = params.personDirection || "down";
+
     }catch(e){}
 }
 
