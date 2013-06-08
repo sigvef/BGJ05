@@ -70,6 +70,8 @@ GameState.prototype.loadKeyframe = function(keyframe){
 GameState.prototype.addPlayer = function(player){
     player.id = this.player_id_counter++; 
     player.color = {r: Math.random()*256|0, g: Math.random()*256|0, b: Math.random()*256|0};
+    player.x = 0.25;
+    player.y = 0.25;
     this.players[player.id] = player;
 }
 
