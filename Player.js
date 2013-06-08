@@ -3,8 +3,11 @@ function Player(x,y){
     this.y = y || 0;
     this.dx = 0;
     this.dy = 0;
+
+    this.bomb_place_cooldown = Player.BOMB_PLACE_COOLDOWN;
 }
 
+Player.BOMB_PLACE_COOLDOWN = 10;
 Player.FRICTION = 0.8;
 Player.SPEED = 0.08;
 
@@ -26,14 +29,26 @@ Player.prototype.update = function(){
         this.dy = 1;
     }
 
-    if(KEYS[KEYS.SPACE]){
+    if(KEYS[KEYS.SPACE] && this.bomb_place_cooldown == 0){
         sm.activeState.placeBomb(this.x, this.y, 3999);
+        this.bomb_place_cooldown = Player.BOMB_PLACE_COOLDOWN;
+    }
+
+    var speed = Math.sqrt(this.dx*this.dx + this.dy*this.dy);
+
+    if(speed > 1) {
+        this.dx = this.dx / speed;
+        this.dy = this.dy / speed;
     }
 
     this.x += this.dx * Player.SPEED;
     this.y += this.dy * Player.SPEED;
     this.dx *= Player.FRICTION;
     this.dy *= Player.FRICTION;
+
+    if(this.bomb_place_cooldown > 0){
+        this.bomb_place_cooldown--;
+    }
 }
 
 
