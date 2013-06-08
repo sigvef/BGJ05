@@ -17,7 +17,7 @@ LightBomb.prototype.update = function(){
     }
 };
 
-LightBomb.prototype.render_light = function(darkctx){
+LightBomb.prototype.render_light = function(darkctx, viewport){
 
     if(this.planted_time + this.duration_in_ms <= t){
         LightBomb.canvas.width = darkctx.canvas.width;
@@ -34,7 +34,7 @@ LightBomb.prototype.render_light = function(darkctx){
         LightBomb.ctx.fill();
 
         darkctx.globalCompositeOperation = 'destination-out';
-        darkctx.drawImage(LightBomb.canvas, 0, 0);
+        darkctx.drawImage(LightBomb.canvas, -viewport.x*GU, -viewport.y*GU);
     }
 
 }
