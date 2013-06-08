@@ -49,6 +49,8 @@ function bootstrap(){
     time = +new Date();
     old_time = time;
     KEYS = [];
+    KEYS.ESC = 27;
+    KEYS.SPACE = 32;
     for(var i=0;i<256;i++){
         KEYS[i] = false;
     }
@@ -64,6 +66,7 @@ function bootstrap(){
     /* add game states here */
     
     sm.addState("mainmenu", new MainMenuState());
+    sm.addState("game", new GameState());
 
     resize();
 
