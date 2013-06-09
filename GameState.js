@@ -83,7 +83,8 @@ GameState.prototype.render = function(ctx){
 
     this.maze.render(ctx, viewport);
 
-    this.player.render(ctx);
+    this.player.render(ctx,this.darkctx, viewport);
+
     for(var i = 0; i<this.numFireflies;i++){
         this.fireflies[i].render(ctx,this.darkctx, viewport);
     }
@@ -102,6 +103,11 @@ GameState.prototype.render = function(ctx){
     for(var i=0;i<this.bombs.length;i++){
         this.bombs[i].render(ctx);
     }
+
+}
+
+
+GameState.protoype.getDarkness = function(x_in_GU, y_in_GU){
 
 }
 
