@@ -1,7 +1,8 @@
 function GameState(){
     this.maze;
     this.player;
-    this.firefly;
+    this.fireflies = [];
+    this.numFireflies = 8;
     this.bombs = [];
 
     this.darkvas = document.createElement('canvas');
@@ -21,7 +22,9 @@ GameState.prototype.pause = function(){
 GameState.prototype.resume = function(){
     this.maze = new Maze();
     this.player = new Player(0.25,0.25);
-    this.firefly = new Firefly(2,2);
+    for(var i = 0; i < this.numFireflies;i++){
+        this.fireflies[i] = new Firefly(Math.random()*16, Math.random()*9);//TODO find some better way to do this
+    }
 }
 
 GameState.prototype.render = function(ctx){
@@ -45,7 +48,9 @@ GameState.prototype.render = function(ctx){
     this.maze.render(ctx, viewport);
 
     this.player.render(ctx);
-    this.firefly.render(ctx);
+    for(var i = 0; i<this.numFireflies;i++){
+        this.fireflies[i].render(ctx,this.darkctx, viewport);
+    }
     for(var i=0;i<this.bombs.length;i++){
         this.bombs[i].render_light(this.darkctx, viewport);
     }
@@ -68,7 +73,9 @@ GameState.prototype.update = function(){
         sm.changeState('mainmenu'); 
     }
     this.player.update();
-    this.firefly.update();
+    for(var i = 0; i<this.numFireflies;i++){
+        this.fireflies[i].update();
+    }
 
     for(var i=0;i<this.bombs.length;i++){
         if(this.bombs[i].update()){
