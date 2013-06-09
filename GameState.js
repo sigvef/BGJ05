@@ -14,6 +14,7 @@ function GameState(socket, renderable){
     this.spawnHouse;
     this.spawnSize = 4;
     this.lightHouses = [];
+    this.lhHash = {};
     this.numLightHouses = 0;
     this.lightHouseSize = 2;
     this.lightHouseAddProb = 0.008;
@@ -64,17 +65,17 @@ GameState.prototype.resume = function(){
 GameState.prototype.createLightHouse = function(x,y,size){
     //making a clearing
     var cell;
-    var col = Math.floor(x/this.maze.blockSize)-size/2 | 0;
-    var row = Math.floor(y/this.maze.blockSize)-size/2 | 0;
+    var col = x/this.maze.blockSize-size/2;
+    var row = y/this.maze.blockSize-size/2;
     for(var i=0;i<size;i++){
         for(var j=0;j<size;j++){
-            var posx = col+i|0;
-            var posy = row+j|0;
+            var posx = col+i;
+            var posy = row+j;
             cell = this.maze.getCellAt(posy,posx);
             cell.setAsPath();
         }
     }
-    this.lightHouses[this.numLightHouses] = new LightHouse(col-1-0.5,row-0.5, size+1);//This is ugly, should be fixed
+    this.lightHouses[this.numLightHouses] = new LightHouse(col-0.5,row-0.5, size+1);//This is ugly, should be fixed
     this.numLightHouses++;
 }
 
@@ -91,13 +92,16 @@ GameState.prototype.onNewCell = function(row,col){
         var y = Math.random();
         this.addFirefly(col+x,row+y); 
     }
-    //adding lighthouses
+    //adding lighthouses randomly
+    /*
     addProb = this.lightHouseAddProb;
     p = Math.random();
     if(addProb > p){
         console.log("Generated a lightHouse at: " + col + " " + row);
         this.createLightHouse(col,row,this.lightHouseSize);
-    }
+    }*/
+
+    //adding 
 }
 
 GameState.prototype.render = function(ctx){
@@ -219,7 +223,7 @@ GameState.prototype.update = function(){
         }
     }
     for(var i = 0; i<this.numLightHouses;i++){
-        this.lightHouses[i].update();
+        //this.lightHouses[i].update();
     }
 
     for(var i=0;i<this.bombs.length;i++){
