@@ -149,6 +149,11 @@ GameState.prototype.render = function(ctx){
     ctx.save();
     ctx.translate(Math.floor(-viewport.x*GU), Math.floor(-viewport.y*GU));
 
+    this.darkctx.fillStyle = 'black';
+    this.darkctx.fillRect(0, 0, 16*GU+GU, 9*GU+GU);
+
+    this.maze.render(ctx, viewport);
+
     for(var i = 0; i<this.numFireflies;i++){
         this.fireflies[i].render(ctx,this.darkctx, viewport);
     }
@@ -160,10 +165,6 @@ GameState.prototype.render = function(ctx){
     }
 
 
-    this.darkctx.fillStyle = 'black';
-    this.darkctx.fillRect(0, 0, 16*GU+GU, 9*GU+GU);
-
-    this.maze.render(ctx, viewport);
 
     for(var i = 0; i<this.numFireflies;i++){
         this.fireflies[i].render(ctx,this.darkctx, viewport);
