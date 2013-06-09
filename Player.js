@@ -39,9 +39,9 @@ Player.BOMB_PLACE_COOLDOWN = 40;
 Player.FRICTION = 0.8;
 Player.SPEED = 0.08;
 Player.START_HP = 0.55;
-Player.FIREFLY_HP_BOOST = 0.05;
+Player.FIREFLY_HP_BOOST = 0.025;
 Player.MAX_HP = 2;
-Player.DIMINISHING_LIGHT = 0.002;
+Player.DIMINISHING_LIGHT = 0.008;
 Player.REACH = 0.7;
 Player.RAD_CONSTANT = 3;
 
