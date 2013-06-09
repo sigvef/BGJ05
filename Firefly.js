@@ -52,10 +52,10 @@ Firefly.prototype.render = function(ctx, darkctx, viewport){
     Firefly.ctx.globalCompositeOperation = 'destination-out';
 
     //the firefly
-    Firefly.ctx.fillStyle = "green";
-    Firefly.ctx.beginPath();
-    Firefly.ctx.arc(this.x*GU,this.y*GU,this.size*GU,0,2*Math.PI,false);
-    Firefly.ctx.fill();
+    ctx.fillStyle = "white";//well, this line seems to do nothing. no idea why.
+    ctx.beginPath();
+    ctx.arc(this.x*GU,this.y*GU,this.size*GU,0,2*Math.PI,false);
+    ctx.fill();
 
     darkctx.globalCompositeOperation = 'destination-out';
     darkctx.drawImage(Firefly.canvas,0,0);
