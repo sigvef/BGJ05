@@ -7,7 +7,7 @@ try{
 function GameState(socket, renderable){
     this.maze = {};
     this.fireflies = [];
-    this.fireflyAddProb = 0.2;
+    this.fireflyAddProb = 0.5;
     this.bombs = [];
     this.player_id_counter = 1;
     this.spawnHouse;

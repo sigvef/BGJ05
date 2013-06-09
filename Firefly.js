@@ -13,7 +13,7 @@ function Firefly(x,y){
 
 Firefly.AURASIZE = .80;
 Firefly.FRICTION = 0.8;
-Firefly.SPEED = 0.08;
+Firefly.SPEED = 0.18;
 try{
 }catch(e){}
 

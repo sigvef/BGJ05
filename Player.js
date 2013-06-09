@@ -38,15 +38,17 @@ Player.prototype.personleft = loadImage("personleft.png");
 Player.BOMB_PLACE_COOLDOWN = 40;
 Player.FRICTION = 0.8;
 Player.SPEED = 0.08;
-Player.START_HP = 0.03;
-Player.MAX_HP = 1;
+Player.START_HP = 0.25;
+Player.FIREFLY_HP_BOOST = 0.05;
+Player.MAX_HP = 4;
+Player.DIMINISHING_LIGHT = 0.001;
 
 Player.canvas = document.createElement('canvas');
 Player.ctx = Player.canvas.getContext('2d');
 
 
 Player.prototype.eatFirefly = function(firefly){
-    this.hp += 0.03;
+    this.hp += Player.FIREFLY_HP_BOOST;
     if(this.hp > Player.MAX_HP){
         this.hp = Player.MAX_HP;
     }
@@ -59,7 +61,7 @@ Player.prototype.update = function(){
 
 
     if(this.game.getPlayerLight() > 250){
-        this.hp -= 0.001;
+        this.hp -= Player.DIMINISHING_LIGHT;
     }
 
     if(this.KEYS[this.KEYS.LEFT]){
@@ -141,6 +143,7 @@ Player.prototype.render = function(ctx, darkctx, viewport){
     var nx = this.x*GU;//+GU*this.playerSize/2;
     var ny = this.y*GU;//+GU*this.playerSize/2;
     var r = Math.max(this.hp*GU,0);
+    console.log("radius: "+ r);
     Player.canvas.width = darkctx.canvas.width;
     Player.canvas.height = darkctx.canvas.height;
     Player.ctx.translate(Math.floor(-viewport.x*GU+0.5*GU),Math.floor(-viewport.y*GU+0.5*GU));
