@@ -25,8 +25,21 @@ GameState.prototype.resume = function(){
     for(var i = 0; i < this.numFireflies;i++){
         this.fireflies[i] = new Firefly(Math.random()*16, Math.random()*9);//TODO find some better way to do this
     }
-    this.spawnHouse = new LightHouse(this.maze.blockSize,0);
-    this.player = new Player(this.maze.blockSize,0);
+    var foundSpawn= false;
+    var x = this.maze.blockSize|0;
+    var y = 0;
+    var i = 0;
+    while(!foundSpawn){
+        console.log(""+(x+i)+" "+ y + "")
+        var cell = this.maze.getCellAt(x+i,y);
+        if(!cell.isWall()){
+            foundSpawn = true;
+        }
+        i++;
+    }
+    this.player = new Player(x+i,y);
+    this.spawnHouse = new LightHouse(this.player.x,this.player.y);
+
 }
 
 GameState.prototype.render = function(ctx){
