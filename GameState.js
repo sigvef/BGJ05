@@ -177,10 +177,6 @@ GameState.prototype.hideMenu = function(){
 }
 
 
-GameState.prototype.getDarkness = function(x_in_GU, y_in_GU){
-
-}
-
 GameState.prototype.update = function(){
 
     if(this.renderable && !this.menu && !SELF_NAME){
