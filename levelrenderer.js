@@ -7,6 +7,7 @@ function LevelRenderer(game) {
 }
 
 LevelRenderer.prototype.wall = loadImage("hedge.png");
+LevelRenderer.prototype.wall2 = loadImage("hedge2.png");
 LevelRenderer.prototype.road = loadImage("ground.png");
 
 /*LevelRenderer.prototype.update = function(dt) {
