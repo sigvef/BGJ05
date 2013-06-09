@@ -55,7 +55,7 @@ Player.prototype.update = function(){
     }
 
     if(KEYS[KEYS.SPACE] && this.bomb_place_cooldown == 0){
-        sm.activeState.placeBomb(this.x, this.y, 999);
+        sm.activeState.placeBomb(this.x, this.y, 999, 3000);
         this.bomb_place_cooldown = Player.BOMB_PLACE_COOLDOWN;
     }
 

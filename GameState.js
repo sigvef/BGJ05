@@ -10,8 +10,8 @@ function GameState(){
     this.darkctx = this.darkvas.getContext('2d');
 }
 
-GameState.prototype.placeBomb = function(x,y,duration){
-    this.bombs.push(new LightBomb(x,y,duration));
+GameState.prototype.placeBomb = function(x,y,duration, blast_duration){
+    this.bombs.push(new LightBomb(x,y,duration, blast_duration));
 }
 
 GameState.prototype.init = function(){
@@ -75,6 +75,7 @@ GameState.prototype.update = function(){
         sm.changeState('mainmenu'); 
     }
     this.player.update();
+    this.spawnHouse.update();
     for(var i = 0; i<this.numFireflies;i++){
         this.fireflies[i].update();
     }

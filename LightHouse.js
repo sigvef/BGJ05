@@ -2,10 +2,15 @@ function LightHouse(x, y){
     this.x = x;
     this.y = y;
     this.size = 2;
+    this.pulseInterval = 10000;
+    this.lastPulse = -1000; //Pulse at the start!
 }
 
 LightHouse.prototype.update = function(){
-
+    if(t - this.lastPulse > this.pulseInterval){
+        sm.activeState.placeBomb(this.x, this.y, 10, 40000);
+        this.lastPulse = t;
+    }
 
 }
 
