@@ -1,15 +1,17 @@
-function LightBomb(x, y, duration_in_ms, blast_duration){
-    this.x = x || 0;
-    this.y = y || 0;
-    this.blast_duration = blast_duration;
-    this.planted_time = t;
-    this.duration_in_ms = duration_in_ms;
+function LightBomb(params){
+    this.x = params.x || 0;
+    this.y = params.y || 0;
+    this.planted_time = params.planted_time || t;
+    this.duration_in_ms = params.duration_in_ms || 0;
+    this.blast_duration = params.blast_duration || 1000;
 }
 
 LightBomb.BANDWIDTH = 2000;
 
+try{
 LightBomb.canvas = document.createElement('canvas');
 LightBomb.ctx = LightBomb.canvas.getContext('2d');
+}catch(e){}
 
 LightBomb.prototype.update = function(){
     if((t - this.planted_time - this.duration_in_ms) > this.blast_duration){
@@ -49,3 +51,11 @@ LightBomb.prototype.render = function(ctx){
         ctx.fillText("" + (this.duration_in_ms - t + this.planted_time)/1000|0, this.x*GU, this.y*GU);
     }
 };
+
+LightBomb.prototype.serialize = function(){
+    return {x: this.x, y: this.y, planted_time: this.planted_time, duration_in_ms: this.duration_in_ms};
+}
+
+try{
+    module.exports = LightBomb;
+}catch(e){}

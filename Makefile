@@ -1,2 +1,2 @@
 all:
-	python -m SimpleHTTPServer 8000
+	node server.js

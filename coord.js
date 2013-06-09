@@ -18,3 +18,7 @@ Coord.prototype.left = function() {
 Coord.prototype.right = function() {
     return new Coord(this.row, this.col + 1);
 };
+
+try{
+    module.exports = Coord;
+}catch(e){}

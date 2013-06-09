@@ -1,16 +1,41 @@
-function Player(x,y){
-    this.x = x || 0;
-    this.y = y || 0;
-    this.dx = 0;
-    this.dy = 0;
+var Player = (function(){
+
+function Player(game, params){ 
+    this.id = params.id;
+
+    this.game = game;
+
+    this.color = params.color || {r:255, g:255, b: 255};
+
+    this.name = params.name || "";
+    
+    this.socket;
+
+    this.x = params.x || 0;
+    this.y = params.y || 0;
+    this.dx = params.dx || 0;
+    this.dy = params.dy || 0;
+
+    this.bomb_place_cooldown = Player.BOMB_PLACE_COOLDOWN;
+
+    this.KEYS = [];
+    this.KEYS.ESC = 27;
+    this.KEYS.SPACE = 32;
+    this.KEYS.UP = 38;
+    this.KEYS.DOWN = 40;
+    this.KEYS.LEFT = 37;
+    this.KEYS.RIGHT = 39;
+
     this.playerSize = 0.5;
     this.hitBox = 0.05;
 
-    this.bomb_place_cooldown = Player.BOMB_PLACE_COOLDOWN;
-    
+    for(var i=0;i<256;i++){
+        this.KEYS[i] = false;
+    }
+
+    try{
     this.personfront = new Image();
     this.personfront.src = "personfront.png";
-    
     this.personback = new Image();
     this.personback.src = "personback.png";
     
@@ -23,39 +48,39 @@ function Player(x,y){
     this.personimages = {"down": this.personfront, "up": this.personback,
     					 "right": this.personside, "left": this.personleft};
     					 
-    this.personDirection = "down";
-    
-    
+    this.personDirection = params.personDirection || "down";
+
+    }catch(e){}
 }
 
-Player.BOMB_PLACE_COOLDOWN = 10;
+Player.BOMB_PLACE_COOLDOWN = 40;
 Player.FRICTION = 0.8;
 Player.SPEED = 0.08;
 
 Player.prototype.update = function(){
 
-    if(KEYS[KEYS.LEFT]){
+    if(this.KEYS[this.KEYS.LEFT]){
         this.dx = -1;
         this.personDirection = "left";
     }
 
-    if(KEYS[KEYS.RIGHT]){
+    if(this.KEYS[this.KEYS.RIGHT]){
         this.dx = 1;
         this.personDirection = "right";
     }
 
-    if(KEYS[KEYS.UP]){
+    if(this.KEYS[this.KEYS.UP]){
         this.dy = -1;
         this.personDirection =  "up";
     }
 
-    if(KEYS[KEYS.DOWN]){
+    if(this.KEYS[this.KEYS.DOWN]){
         this.dy = 1;
         this.personDirection = "down";
     }
 
-    if(KEYS[KEYS.SPACE] && this.bomb_place_cooldown == 0){
-        sm.activeState.placeBomb(this.x, this.y, 999, 3000);
+    if(this.KEYS[this.KEYS.SPACE] && this.bomb_place_cooldown == 0){
+        this.game.placeBomb(this.x, this.y, 999, 3000);
         this.bomb_place_cooldown = Player.BOMB_PLACE_COOLDOWN;
     }
 
@@ -73,17 +98,17 @@ Player.prototype.update = function(){
     this.dx *= Player.FRICTION;
     this.dy *= Player.FRICTION;
 
-    if(sm.activeState.maze.collide(this.x+this.hitBox,this.y+this.hitBox) == true
-            || sm.activeState.maze.collide(this.x+this.hitBox,this.y-this.hitBox) == true
-            || sm.activeState.maze.collide(this.x-this.hitBox,this.y+this.hitBox) == true
-            || sm.activeState.maze.collide(this.x-this.hitBox,this.y-this.hitBox) == true
+    if(this.x <= 0 || this.game.maze.collide(this.x+this.hitBox,this.y+this.hitBox) == true
+            || this.game.maze.collide(this.x+this.hitBox,this.y-this.hitBox) == true
+            || this.game.maze.collide(this.x-this.hitBox,this.y+this.hitBox) == true
+            || this.game.maze.collide(this.x-this.hitBox,this.y-this.hitBox) == true
             ){
 
         //collision in x direction
-        if(sm.activeState.maze.collide(this.x+this.hitBox,lasty+this.hitBox) == true 
-                || sm.activeState.maze.collide(this.x+this.hitBox,lasty-this.hitBox)== true
-                || sm.activeState.maze.collide(this.x-this.hitBox,lasty+this.hitBox)== true
-                || sm.activeState.maze.collide(this.x-this.hitBox,lasty-this.hitBox)== true
+        if(this.x <= 0 ||  this.game.maze.collide(this.x+this.hitBox,lasty+this.hitBox) == true 
+                || this.game.maze.collide(this.x+this.hitBox,lasty-this.hitBox)== true
+                || this.game.maze.collide(this.x-this.hitBox,lasty+this.hitBox)== true
+                || this.game.maze.collide(this.x-this.hitBox,lasty-this.hitBox)== true
                 ){
             this.x = lastx;
             this.dx = 0;
@@ -91,10 +116,10 @@ Player.prototype.update = function(){
         }
 
         //collision in y direction
-        if(sm.activeState.maze.collide(lastx+this.hitBox,this.y+this.hitBox) == true
-                || sm.activeState.maze.collide(lastx+this.hitBox,this.y-this.hitBox) == true
-                || sm.activeState.maze.collide(lastx-this.hitBox,this.y+this.hitBox) == true
-                || sm.activeState.maze.collide(lastx-this.hitBox,this.y-this.hitBox) == true
+        if(this.game.maze.collide(lastx+this.hitBox,this.y+this.hitBox) == true
+                || this.game.maze.collide(lastx+this.hitBox,this.y-this.hitBox) == true
+                || this.game.maze.collide(lastx-this.hitBox,this.y+this.hitBox) == true
+                || this.game.maze.collide(lastx-this.hitBox,this.y-this.hitBox) == true
                 ){
             this.y = lasty;
             this.dy = 0;
@@ -114,3 +139,16 @@ Player.prototype.render = function(ctx){
         this.y*GU-GU*this.playerSize/2, GU*this.playerSize,GU*this.playerSize); 
 }
 
+Player.prototype.serialize = function(){
+    return {id: this.id, name: this.name, x: this.x, y: this.y, dx: this.dx, dy: this.dy,
+            personDirection: this.personDirection};
+}
+
+return Player;
+
+})();
+
+
+try{
+    module.exports = Player;
+}catch(e){}
