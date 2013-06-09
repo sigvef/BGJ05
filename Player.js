@@ -1,5 +1,4 @@
-
-function Player(game, x,y){
+function Player(x,y,game){
     this.game = game;
     this.x = x || 0;
     this.y = y || 0;
@@ -50,6 +49,11 @@ Player.canvas = document.createElement('canvas');
 Player.ctx = Player.canvas.getContext('2d');
 
 Player.prototype.update = function(){
+
+
+    if(this.game.getPlayerLight() > 250){
+        this.hp -= 0.001;
+    }
 
     if(this.KEYS[this.KEYS.LEFT]){
         this.dx = -1;
