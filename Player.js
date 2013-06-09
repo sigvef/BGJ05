@@ -53,7 +53,7 @@ Player.prototype.eatFirefly = function(firefly){
     }
 
 
-    if(this.game.score % 5 == 0){
+    if(this.game.score % 5 != 1){
         this.game.sfx.takeFirefly.superplay();
     }else{
         this.game.sfx.celebrate.superplay();
