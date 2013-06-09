@@ -50,6 +50,8 @@ Player.prototype.eatFirefly = function(firefly){
     if(this.hp > Player.MAX_HP){
         this.hp = Player.MAX_HP;
     }
+
+    this.game.sfx.takeFirefly.play();
     
 }
 

@@ -34,6 +34,11 @@ function GameState(socket, renderable){
     }
 }
 
+GameState.prototype.sfx = {
+    takeFirefly: loadAudio('take-firefly.ogg'),
+    celebrate: loadAudio('celebrate.ogg')
+}
+
 GameState.prototype.titleImage = loadImage("title.png");
 
 GameState.prototype.placeBomb = function(x,y,duration, blast_duration){
