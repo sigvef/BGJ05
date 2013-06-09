@@ -29,9 +29,7 @@ function GameState(socket, renderable){
 
     var that = this;
     this.keydownMenuListener = function(e){
-        if(e.keyCode == 13) { //enter
-            that.hideMenu();
-        }
+        that.hideMenu();
     }
 }
 
