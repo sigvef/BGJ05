@@ -42,6 +42,7 @@ Player.START_HP = 0.25;
 Player.FIREFLY_HP_BOOST = 0.05;
 Player.MAX_HP = 4;
 Player.DIMINISHING_LIGHT = 0.001;
+Player.REACH = 0.7;
 
 Player.canvas = document.createElement('canvas');
 Player.ctx = Player.canvas.getContext('2d');
@@ -53,7 +54,12 @@ Player.prototype.eatFirefly = function(firefly){
         this.hp = Player.MAX_HP;
     }
 
-    this.game.sfx.takeFirefly.superplay();
+
+    if(this.game.score % 5 != 1){
+        this.game.sfx.takeFirefly.superplay();
+    }else{
+        this.game.sfx.celebrate.superplay();
+    }
     
 }
 
