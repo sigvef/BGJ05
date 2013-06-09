@@ -81,7 +81,7 @@ function client(){
     game.connect = function(url){
 
         console.log("doing a connect");
-        socket = io.connect('http://localhost:8000');
+        socket = io.connect('//:8000');
 
         game.map_asked_for = {};
 
