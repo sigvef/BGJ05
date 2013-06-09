@@ -107,8 +107,6 @@ GameState.prototype.render = function(ctx){
 }
 
 
-GameState.protoype.getDarkness = function(x_in_GU, y_in_GU){
-}
 
 GameState.prototype.update = function(){
     if(KEYS[KEYS.ESC]){
