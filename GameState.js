@@ -31,10 +31,14 @@ function GameState(socket, renderable){
 
     var that = this;
     this.keydownMenuListener = function(e){
-        document.body.requestFullscreen && document.body.requestFullscreen();
-        document.body.webkitRequestFullscreen && document.body.webkitRequestFullscreen(); 
-        document.body.mozRequestFullscreen && document.body.mozRequestFullScreen();
-        that.hideMenu();
+        if(e.keyCode == 13){
+            document.body.requestFullscreen && document.body.requestFullscreen();
+            document.body.webkitRequestFullscreen && document.body.webkitRequestFullscreen(); 
+            document.body.mozRequestFullscreen && document.body.mozRequestFullScreen();
+            that.hideMenu();
+        }else if(e.keyCode == 27){
+            that.hideMenu();
+        }
     }
 }
 
@@ -58,6 +62,7 @@ GameState.prototype.pause = function(){
 }
 
 GameState.prototype.resume = function(){
+    this.score = 0;
     this.maze = new Maze(this);
     this.fireflies = [];
     for(var i = 0; i < this.fireflies.length;i++){
