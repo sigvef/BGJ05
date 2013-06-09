@@ -154,17 +154,8 @@ GameState.prototype.render = function(ctx){
     ctx.restore();
 
     if(this.menu){
-        var padding = 0.5*GU;
-        var width = 8*GU;
-
-        /* TODO: put some of this in css */
-        this.menuDiv.style.width = width + 'px';
-        this.menuDiv.style.height = 2*GU + 'px';
-        this.menuDiv.style.padding = padding + 'px';
-        this.menuDiv.style.top = window.innerHeight/2 - padding/2 + 'px';
-        this.menuDiv.style.left = window.innerWidth/2 - width/2 - padding + 'px';
-        this.menuDiv.style.borderRadius = GU+'px';
-
+        ctx.fillStyle = 'rgba(0,0,0,0.9)';
+        ctx.fillRect(0,0, 16*GU, 9*GU);
         ctx.drawImage(this.titleImage, 0, 0, 16*GU, 9*GU);
     }
 }
