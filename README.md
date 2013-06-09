@@ -12,6 +12,8 @@ sudo pip install nodeenv
 nodeenv venv
 source venv/bin/activate
 npm install socket.io
+npm install socket.io-client
+npm install connect
 ```
 
 Then to run, do:
