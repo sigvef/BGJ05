@@ -28,6 +28,20 @@ function clamp(low, x, high){
     return Math.max(low,Math.min(x,high));
 }
 
+function loadAudio(url){
+    var audio = new Audio();  
+    console.log(ASSETS, "loading",url);
+    audio.onload = function(){
+        console.log(ASSETS, url,"COMPLETED");
+    };
+    audio.src = url;
+    audio.superplay = function(){
+        audio.currentTime = 0;
+        audio.play();
+    }
+    return audio;
+}
+
 function loadImage(url){
     var image = new Image();  
     ASSETS++;

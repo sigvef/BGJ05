@@ -50,6 +50,8 @@ Player.prototype.eatFirefly = function(firefly){
     if(this.hp > Player.MAX_HP){
         this.hp = Player.MAX_HP;
     }
+
+    this.game.sfx.takeFirefly.superplay();
     
 }
 
@@ -138,7 +140,7 @@ Player.prototype.update = function(){
 Player.prototype.render = function(ctx, darkctx, viewport){
     var nx = this.x*GU;//+GU*this.playerSize/2;
     var ny = this.y*GU;//+GU*this.playerSize/2;
-    var r = this.hp*GU;
+    var r = Math.max(this.hp*GU,0);
     Player.canvas.width = darkctx.canvas.width;
     Player.canvas.height = darkctx.canvas.height;
     Player.ctx.translate(Math.floor(-viewport.x*GU+0.5*GU),Math.floor(-viewport.y*GU+0.5*GU));
