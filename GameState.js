@@ -31,6 +31,9 @@ function GameState(socket, renderable){
 
     var that = this;
     this.keydownMenuListener = function(e){
+        document.body.requestFullscreen && document.body.requestFullscreen();
+        document.body.webkitRequestFullscreen && document.body.webkitRequestFullscreen(); 
+        document.body.mozRequestFullscreen && document.body.mozRequestFullScreen();
         that.hideMenu();
     }
 }
