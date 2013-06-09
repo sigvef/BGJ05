@@ -4,7 +4,7 @@ function Maze(){
        either a graph or an array of cells or whatever is best */
     this.patternsMatrix = {};
     this.cells = {};
-    this.blockSize = 0.5;
+    this.blockSize = 1;
     this.hedgeImage = new Image();
     this.groundImage = new Image();
     this.hedgeImage.src = "hedge.png";

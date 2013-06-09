@@ -22,7 +22,7 @@ LightBomb.prototype.render_light = function(darkctx, viewport){
     if(this.planted_time + this.duration_in_ms <= t){
         LightBomb.canvas.width = darkctx.canvas.width;
         LightBomb.canvas.height = darkctx.canvas.height;
-        LightBomb.ctx.translate(Math.floor(-viewport.x*GU), Math.floor(-viewport.y*GU));
+        LightBomb.ctx.translate(Math.floor(-viewport.x*GU+0.5*GU), Math.floor(-viewport.y*GU+0.5*GU));
         var time_percent = 1 - (t - this.planted_time - this.duration_in_ms)/this.blast_duration;
         LightBomb.ctx.fillStyle = 'rgba(255,255,255,' + square_interpolation(1, 0, time_percent)  + ')';
         LightBomb.ctx.beginPath();

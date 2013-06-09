@@ -47,7 +47,7 @@ Firefly.prototype.render = function(ctx, darkctx, viewport){
     var r = this.auraSize*GU;
     Firefly.canvas.width = darkctx.canvas.width;
     Firefly.canvas.height = darkctx.canvas.height;
-    Firefly.ctx.translate(Math.floor(-viewport.x*GU),Math.floor(-viewport.y*GU));
+    Firefly.ctx.translate(Math.floor(-viewport.x*GU+0.5*GU),Math.floor(-viewport.y*GU+0.5*GU));
     //Firefly.ctx.fillStyle = 'rgba(255,255,255,' + square_interpolation(1,0,1) +')';
     Firefly.ctx.beginPath();
     var rad = Firefly.ctx.createRadialGradient(nx,ny,0,nx,ny,r);
