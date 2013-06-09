@@ -4,13 +4,14 @@ function GameState(){
     this.fireflies = [];
     this.numFireflies = 8;
     this.bombs = [];
+    this.spawnHouse;
 
     this.darkvas = document.createElement('canvas');
     this.darkctx = this.darkvas.getContext('2d');
 }
 
-GameState.prototype.placeBomb = function(x,y,duration){
-    this.bombs.push(new LightBomb(x,y,duration));
+GameState.prototype.placeBomb = function(x,y,duration, blast_duration){
+    this.bombs.push(new LightBomb(x,y,duration, blast_duration));
 }
 
 GameState.prototype.init = function(){
@@ -24,7 +25,8 @@ GameState.prototype.resume = function(){
     for(var i = 0; i < this.numFireflies;i++){
         this.fireflies[i] = new Firefly(Math.random()*16, Math.random()*9);//TODO find some better way to do this
     }
-    this.player = new Player(-1.75,0);
+    this.spawnHouse = new LightHouse(this.maze.blockSize,0);
+    this.player = new Player(this.maze.blockSize,0);
 }
 
 GameState.prototype.render = function(ctx){
@@ -38,9 +40,8 @@ GameState.prototype.render = function(ctx){
         width: 16,
         height: 9 
     };
-    
     ctx.translate(Math.floor(-viewport.x*GU), Math.floor(-viewport.y*GU));
-
+    //console.log("Player x:"+((this.player.x/this.maze.blockSize)|0)+" y:"+((this.player.y/this.maze.blockSize)|0));
 
     this.darkctx.fillStyle = 'black';
     this.darkctx.fillRect(0, 0, 16*GU+GU, 9*GU+GU);
@@ -51,6 +52,7 @@ GameState.prototype.render = function(ctx){
     for(var i = 0; i<this.numFireflies;i++){
         this.fireflies[i].render(ctx,this.darkctx, viewport);
     }
+    this.spawnHouse.render(this.darkctx, viewport);
     for(var i=0;i<this.bombs.length;i++){
         this.bombs[i].render_light(this.darkctx, viewport);
     }
@@ -73,6 +75,7 @@ GameState.prototype.update = function(){
         sm.changeState('mainmenu'); 
     }
     this.player.update();
+    this.spawnHouse.update();
     for(var i = 0; i<this.numFireflies;i++){
         this.fireflies[i].update();
     }

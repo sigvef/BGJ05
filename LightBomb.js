@@ -1,18 +1,18 @@
-function LightBomb(x,y, duration_in_ms){
+function LightBomb(x, y, duration_in_ms, blast_duration){
     this.x = x || 0;
     this.y = y || 0;
+    this.blast_duration = blast_duration;
     this.planted_time = t;
     this.duration_in_ms = duration_in_ms;
 }
 
-LightBomb.ALIVE_TIME_IN_MS = 10000;
 LightBomb.BANDWIDTH = 2000;
 
 LightBomb.canvas = document.createElement('canvas');
 LightBomb.ctx = LightBomb.canvas.getContext('2d');
 
 LightBomb.prototype.update = function(){
-    if((t - this.planted_time - this.duration_in_ms) > LightBomb.ALIVE_TIME_IN_MS){
+    if((t - this.planted_time - this.duration_in_ms) > this.blast_duration){
         return true;
     }
 };
@@ -23,7 +23,8 @@ LightBomb.prototype.render_light = function(darkctx, viewport){
         LightBomb.canvas.width = darkctx.canvas.width;
         LightBomb.canvas.height = darkctx.canvas.height;
         LightBomb.ctx.translate(Math.floor(-viewport.x*GU), Math.floor(-viewport.y*GU));
-        LightBomb.ctx.fillStyle = 'rgba(255,255,255,' + square_interpolation(1, 0, 1 - (t - this.planted_time - this.duration_in_ms)/LightBomb.ALIVE_TIME_IN_MS) + ')';
+        var time_percent = 1 - (t - this.planted_time - this.duration_in_ms)/this.blast_duration;
+        LightBomb.ctx.fillStyle = 'rgba(255,255,255,' + square_interpolation(1, 0, time_percent)  + ')';
         LightBomb.ctx.beginPath();
         LightBomb.ctx.arc(this.x*GU, this.y*GU, (t - this.planted_time - this.duration_in_ms)/1000*GU, 0, 2 * Math.PI, false);
         LightBomb.ctx.fill();
