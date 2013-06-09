@@ -43,10 +43,20 @@ function Player(x,y,game){
 Player.BOMB_PLACE_COOLDOWN = 40;
 Player.FRICTION = 0.8;
 Player.SPEED = 0.08;
-Player.START_HP = 0.5;
+Player.START_HP = 0.03;
+Player.MAX_HP = 1;
 
 Player.canvas = document.createElement('canvas');
 Player.ctx = Player.canvas.getContext('2d');
+
+
+Player.prototype.eatFirefly = function(firefly){
+    this.hp += 0.03;
+    if(this.hp > Player.MAX_HP){
+        this.hp = Player.MAX_HP;
+    }
+    
+}
 
 Player.prototype.update = function(){
 
@@ -94,14 +104,14 @@ Player.prototype.update = function(){
     this.dx *= Player.FRICTION;
     this.dy *= Player.FRICTION;
 
-    if(this.x <= 0 || this.game.maze.collide(this.x+this.hitBox,this.y+this.hitBox) == true
+    if(this.game.maze.collide(this.x+this.hitBox,this.y+this.hitBox) == true
             || this.game.maze.collide(this.x+this.hitBox,this.y-this.hitBox) == true
             || this.game.maze.collide(this.x-this.hitBox,this.y+this.hitBox) == true
             || this.game.maze.collide(this.x-this.hitBox,this.y-this.hitBox) == true
             ){
 
         //collision in x direction
-        if(this.x <= 0 ||  this.game.maze.collide(this.x+this.hitBox,lasty+this.hitBox) == true 
+        if(this.game.maze.collide(this.x+this.hitBox,lasty+this.hitBox) == true 
                 || this.game.maze.collide(this.x+this.hitBox,lasty-this.hitBox)== true
                 || this.game.maze.collide(this.x-this.hitBox,lasty+this.hitBox)== true
                 || this.game.maze.collide(this.x-this.hitBox,lasty-this.hitBox)== true
