@@ -54,9 +54,18 @@ Player.prototype.eatFirefly = function(firefly){
     if(this.hp > Player.MAX_HP){
         this.hp = Player.MAX_HP;
     }
-
-
-    if(this.game.score % 5 == 4){
+    
+    if(this.game.score % 1000 == 0){
+        this.game.placeBomb(firefly.x, firefly.y, 0, 5000);
+    }else if(this.game.score % 100 == 0){
+        this.game.placeBomb(firefly.x, firefly.y, 0, 3000);
+    }else if(this.game.score % 10 == 0){
+        this.game.placeBomb(firefly.x, firefly.y, 0, 1500);
+    }else{
+        this.game.placeBomb(firefly.x, firefly.y, 0, 700);
+    }
+    
+    if(this.game.score % 10 == 0){
         this.game.sfx.celebrate.superplay();
         this.game.textalizer = 50;
     }else{
@@ -67,7 +76,12 @@ Player.prototype.eatFirefly = function(firefly){
 Player.prototype.update = function(){
     var val = 2.6;
     if(Math.abs(this.x) > val || Math.abs(this.y) > val)
-        this.hp -= Player.DIMINISHING_LIGHT;
+
+    if(this.hp <= 0){
+        localStorage.score = this.game.score;
+        localStorage.bestScore = Math.max(this.game.score, +localStorage.bestScore);
+        sm.changeState('game');
+    }
 
     if(this.KEYS[this.KEYS.LEFT]){
         this.dx = -1;
@@ -90,7 +104,6 @@ Player.prototype.update = function(){
     }
 
     if(this.KEYS[this.KEYS.SPACE] && this.bomb_place_cooldown == 0){
-        this.game.placeBomb(this.x, this.y, 999, 3000);
         this.bomb_place_cooldown = Player.BOMB_PLACE_COOLDOWN;
     }
 

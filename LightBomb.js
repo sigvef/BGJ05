@@ -28,14 +28,14 @@ LightBomb.prototype.render_light = function(darkctx, viewport){
         var time_percent = 1 - (t - this.planted_time - this.duration_in_ms)/this.blast_duration;
         LightBomb.ctx.fillStyle = 'rgba(255,255,255,' + square_interpolation(1, 0, time_percent)  + ')';
         LightBomb.ctx.beginPath();
-        LightBomb.ctx.arc(this.x*GU, this.y*GU, (t - this.planted_time - this.duration_in_ms)/1000*GU, 0, 2 * Math.PI, false);
+        LightBomb.ctx.arc(this.x*GU, this.y*GU, (t - this.planted_time - this.duration_in_ms)/100*GU, 0, 2 * Math.PI, false);
         LightBomb.ctx.fill();
-        LightBomb.ctx.globalCompositeOperation = 'destination-out';
+        /*LightBomb.ctx.globalCompositeOperation = 'destination-out';
         LightBomb.ctx.fillStyle = 'black';
         LightBomb.ctx.beginPath();
         var radius = (t - this.planted_time - this.duration_in_ms - LightBomb.BANDWIDTH)/1000*GU;
         LightBomb.ctx.arc(this.x*GU, this.y*GU, radius >= 0 ? radius : 0, 0, 2 * Math.PI, false);
-        LightBomb.ctx.fill();
+        LightBomb.ctx.fill();*/
 
         darkctx.globalCompositeOperation = 'destination-out';
         darkctx.drawImage(LightBomb.canvas,0,0);// -viewport.x*GU, -viewport.y*GU);
