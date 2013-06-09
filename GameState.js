@@ -59,15 +59,16 @@ GameState.prototype.pause = function(){
 
 GameState.prototype.resume = function(){
     this.maze = new Maze(this);
+    this.fireflies = [];
     for(var i = 0; i < this.fireflies.length;i++){
         this.fireflies[i] = new Firefly(Math.random()*16, Math.random()*9);//TODO find some better way to do this
     }
     this.player = new Player(0,0, this);
     //this.spawnHouse = new LightHouse(this.player.x,this.player.y);
     this.spawnHouse = this.createLightHouse(this.player.x,this.player.y, this.spawnSize);
-
-
+    this.showMenu();
 }
+
 GameState.prototype.createLightHouse = function(x,y,size){
     //making a clearing
     var cell;
@@ -147,10 +148,7 @@ GameState.prototype.render = function(ctx){
     }
 
 
-    ctx.save();
-    ctx.globalAlpha = 0.98;
     ctx.drawImage(this.darkvas, viewport.x*GU-0.5*GU, viewport.y*GU-0.5*GU);
-    ctx.restore();
 
     for(var i=0;i<this.bombs.length;i++){
         this.bombs[i].render(ctx);

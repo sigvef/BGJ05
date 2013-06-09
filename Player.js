@@ -80,7 +80,7 @@ Player.prototype.update = function(){
 
     if(this.hp <= 0){
         localStorage.score = this.game.score;
-        localStorage.bestScore = Math.max(this.game.score, +localStorage.bestScore);
+        localStorage.bestScore = Math.max(this.game.score, +(localStorage.bestScore || 0));
         sm.changeState('game');
     }
 
