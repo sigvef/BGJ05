@@ -1,2 +1,4 @@
 *.sw*
+venv/
+node_modules/
 .nfs*
