@@ -124,7 +124,7 @@ GameState.prototype.render = function(ctx){
         if(this.fireflies[i] == undefined) continue;
         this.fireflies[i].render(ctx,this.darkctx, viewport);
     }
-    for(var i=0;i<this.numLightHouses;i++){
+    for(var i=0;i<this.lightHouses.length;i++){
         this.lightHouses[i].render(this.darkctx,viewport);
     }
 
