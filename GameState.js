@@ -4,6 +4,7 @@ function GameState(){
     this.fireflies = [];
     this.numFireflies = 8;
     this.bombs = [];
+    this.spawnHouse;
 
     this.darkvas = document.createElement('canvas');
     this.darkctx = this.darkvas.getContext('2d');
@@ -24,6 +25,7 @@ GameState.prototype.resume = function(){
     for(var i = 0; i < this.numFireflies;i++){
         this.fireflies[i] = new Firefly(Math.random()*16, Math.random()*9);//TODO find some better way to do this
     }
+    this.spawnHouse = new LightHouse(this.maze.blockSize,0);
     this.player = new Player(this.maze.blockSize,0);
 }
 
@@ -50,6 +52,7 @@ GameState.prototype.render = function(ctx){
     for(var i = 0; i<this.numFireflies;i++){
         this.fireflies[i].render(ctx,this.darkctx, viewport);
     }
+    this.spawnHouse.render(this.darkctx, viewport);
     for(var i=0;i<this.bombs.length;i++){
         this.bombs[i].render_light(this.darkctx, viewport);
     }
