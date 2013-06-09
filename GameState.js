@@ -119,9 +119,11 @@ GameState.prototype.render = function(ctx){
 
         this.maze.render(ctx, 0, 0, 16, 9);
 
+        /*
         for(var i=0;i<this.bombs.length;i++){
             this.bombs[i].render_light(this.darkctx);
         }
+        */
 
         for(var i in this.players){
             this.players[i].render(ctx);
@@ -129,7 +131,7 @@ GameState.prototype.render = function(ctx){
 
         ctx.save();
         ctx.globalAlpha = 0.98;
-        ctx.drawImage(this.darkvas, 0, 0);
+        //ctx.drawImage(this.darkvas, 0, 0);
         ctx.restore();
 
         SELF_ID && this.players[SELF_ID].render(ctx);
