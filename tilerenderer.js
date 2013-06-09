@@ -13,6 +13,9 @@ function TileRenderer(row, col, world, context, renderer, game){
     this.cell = world.getCellAt(row    , col);
     }
 
+
+TileRenderer.WAVE_PERIOD = 1000;
+
 TileRenderer.prototype.isWall = function(x,y){
     this.cell = this.world.getCellAt(this.row, this.col);
     if(this.cell){
@@ -54,8 +57,8 @@ TileRenderer.prototype.fits = function(arr){
 TileRenderer.prototype.blit = function(sprite, srcX, srcY){
     var blockSize = this.world.blockSize;
     this.context.drawImage(sprite, this.render_col*blockSize*GU, this.render_row*blockSize*GU, blockSize*GU, blockSize*GU);
-    //this.context.drawImage(sprite, srcX, srcY, blockSize*GU, blockSize*GU, 
-            //this.render_col*blockSize*GU, this.render_row*blockSize*GU, blockSize*GU, blockSize*GU);
+    ///this.context.drawImage(sprite, srcX, srcY, blockSize*GU, blockSize*GU, 
+     //       this.render_col*blockSize*GU, this.render_row*blockSize*GU, blockSize*GU, blockSize*GU);
     //this.context.fillText(this.render_col+","+this.render_row ,this.render_col*blockSize*GU+0.6*GU, this.render_row*blockSize*GU+0.4*GU, blockSize*GU, blockSize*GU);
 
 };
@@ -90,10 +93,14 @@ TileRenderer.prototype.renderWall = function(){
     if (this.isPath(0,1))   idx += 2;
     if (this.isPath(1,0))   idx += 4;
     if (this.isPath(0,-1))  idx += 8;
-    this.blit(this.renderer.wall,0 , idx * 16);
+    if(t % TileRenderer.WAVE_PERIOD  < TileRenderer.WAVE_PERIOD/2){
+        this.blit(this.renderer.wall, 0, 0);
+    }else{
+        this.blit(this.renderer.wall2,0,0);
+    }
 };
 
 TileRenderer.prototype.renderRoad = function(){
-    this.blit(this.renderer.road, 0, 0);
+        this.blit(this.renderer.road, 0, 0);
 };
 

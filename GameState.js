@@ -19,6 +19,8 @@ function GameState(socket, renderable){
     this.lightHouseAddProb = 0.008;
     this.score = 0;
 
+    this.textalizer = 0;
+
     this.menu = false;
 
     this.renderable = renderable;
@@ -151,9 +153,15 @@ GameState.prototype.render = function(ctx){
         this.bombs[i].render(ctx);
     }
 
-    ctx.font = "30px Arial";
+    ctx.font = (GU*0.3)+"px Arial";
     ctx.fillStyle = "white";
-    ctx.fillText(this.score, viewport.x*GU+7.5*GU, viewport.y*GU+0.5*GU);
+    ctx.textAlign = 'center',
+    ctx.textBaseline = 'top';
+    if(this.textalizer > 0){
+        ctx.fillStyle = 'orange';
+        ctx.font = (this.textalizer*GU*0.02+GU*0.3)+"px Arial";
+    }
+    ctx.fillText(this.score + ' firefl' + ['ies','y'][+(this.score == 1)], viewport.x*GU+8*GU, viewport.y*GU+0.1*GU);
     ctx.restore();
 
     if(this.menu){
@@ -199,6 +207,9 @@ GameState.prototype.update = function(){
 
     this.player.update();
 
+    if(this.textalizer > 0){
+        this.textalizer--;
+    }
 
     var firefly;
     for(var i = 0; i < this.fireflies.length;i++){
