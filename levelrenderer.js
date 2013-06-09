@@ -1,4 +1,5 @@
-function LevelRenderer() {
+function LevelRenderer(game) {
+    this.game = game;
     this.height = 9;
     this.width = 16;
     this.wall = new Image();
@@ -15,7 +16,7 @@ function LevelRenderer() {
 
 LevelRenderer.prototype.renderTile = function(row, col, world, context){
     if (!([row,col] in this.tileRenderers)) {
-        this.tileRenderers[[row,col]] = new TileRenderer(row, col, world, context, this);
+        this.tileRenderers[[row,col]] = new TileRenderer(row, col, world, context, this, this.game);
     }
     this.tileRenderers[[row,col]].render(row, col);
 };

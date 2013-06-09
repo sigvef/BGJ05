@@ -1,4 +1,5 @@
-function TileRenderer(row, col, world, context, renderer){
+function TileRenderer(row, col, world, context, renderer, game){
+    this.game = game;
     this.row = row;
     this.col = col;
     this.world = world;
@@ -51,6 +52,7 @@ TileRenderer.prototype.render = function(render_row, render_col){
         this.renderRoad();
     }
     var cell = this.world.getCellAt(this.row, this.col);
+    //fireflies porbability for adding.
     if (cell.hasContent()) {
         /*if (cell.content.isCoin()) {
             this.renderCoin(cell.content.value);

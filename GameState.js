@@ -21,7 +21,7 @@ GameState.prototype.pause = function(){
 }
 
 GameState.prototype.resume = function(){
-    this.maze = new Maze();
+    this.maze = new Maze(this);
     for(var i = 0; i < this.numFireflies;i++){
         this.fireflies[i] = new Firefly(Math.random()*16, Math.random()*9);//TODO find some better way to do this
     }
@@ -40,6 +40,19 @@ GameState.prototype.resume = function(){
     this.player = new Player(x+i,y);
     this.spawnHouse = new LightHouse(this.player.x,this.player.y);
 
+}
+GameState.prototype.addFirefly = function(x,y){
+    this.fireflies[this.numFireflies] = new Firefly(x,y);
+    this.numFireflies++;
+}
+GameState.prototype.onNewCell = function(row,col){
+    var addProb = 0.2;
+    var p = Math.random();
+    if(addProb > p){
+        var x = Math.random();
+        var y = Math.random();
+        this.addFirefly(row+x,col+y); 
+    }
 }
 
 GameState.prototype.render = function(ctx){
