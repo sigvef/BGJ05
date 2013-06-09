@@ -5,9 +5,12 @@ function GameState(){
     this.numFireflies = 8;
     this.bombs = [];
     this.spawnHouse;
+    this.spawnSize = 4;
+    this.lightHouseSize = 2;
 
     this.darkvas = document.createElement('canvas');
     this.darkctx = this.darkvas.getContext('2d');
+
 }
 
 GameState.prototype.placeBomb = function(x,y,duration, blast_duration){
@@ -25,22 +28,28 @@ GameState.prototype.resume = function(){
     for(var i = 0; i < this.numFireflies;i++){
         this.fireflies[i] = new Firefly(Math.random()*16, Math.random()*9);//TODO find some better way to do this
     }
-    var foundSpawn= false;
-    var x = this.maze.blockSize|0;
-    var y = 0;
-    var i = 0;
-    while(!foundSpawn){
-        console.log(""+(x+i)+" "+ y + "")
-        var cell = this.maze.getCellAt(x+i,y);
-        if(!cell.isWall()){
-            foundSpawn = true;
-        }
-        i++;
-    }
-    this.player = new Player(x+i,y);
-    this.spawnHouse = new LightHouse(this.player.x,this.player.y);
+    this.player = new Player(0,0);
+    //this.spawnHouse = new LightHouse(this.player.x,this.player.y);
+    this.spawnHouse = this.createLightHouse(this.player.x,this.player.y, this.spawnSize);
+
 
 }
+GameState.prototype.createLightHouse = function(x,y,size){
+    //making a clearing
+    var cell;
+    var col = Math.floor(x/this.maze.blockSize)-size/2 | 0;
+    var row = Math.floor(y/this.maze.blockSize)-size/2 | 0;
+    for(var i=0;i<size;i++){
+        for(var j=0;j<size;j++){
+            var posx = col+i;
+            var posy = row+j;
+            cell = this.maze.getCellAt(posx,posy);
+            cell.setAsPath();
+        }
+    }
+    return new LightHouse(col-0.5,row-0.5, size+1);
+}
+
 GameState.prototype.addFirefly = function(x,y){
     this.fireflies[this.numFireflies] = new Firefly(x,y);
     this.numFireflies++;
