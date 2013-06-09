@@ -56,13 +56,13 @@ Player.prototype.eatFirefly = function(firefly){
     }
     
     if(this.game.score % 1000 == 0){
-        this.game.placeBomb(firefly.x, firefly.y, 0, 5000);
+        this.game.placeBomb(firefly.x, firefly.y, 0, 7000);
     }else if(this.game.score % 100 == 0){
-        this.game.placeBomb(firefly.x, firefly.y, 0, 3000);
+        this.game.placeBomb(firefly.x, firefly.y, 0, 5000);
     }else if(this.game.score % 10 == 0){
-        this.game.placeBomb(firefly.x, firefly.y, 0, 1500);
+        this.game.placeBomb(firefly.x, firefly.y, 0, 3000);
     }else{
-        this.game.placeBomb(firefly.x, firefly.y, 0, 700);
+        this.game.placeBomb(firefly.x, firefly.y, 0, 400);
     }
     
     if(this.game.score % 10 == 0){
