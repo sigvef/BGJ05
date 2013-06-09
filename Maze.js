@@ -3,6 +3,7 @@ try{
     require('./util');
 }catch(e){}
 
+
 function Maze(game){
 
     this.game = game;
@@ -10,15 +11,13 @@ function Maze(game){
     this.game = game;
     this.cells = {};
     this.blockSize = 1;
-    try{
-    this.hedgeImage = new Image();
-    this.groundImage = new Image();
-    this.hedgeImage.src = "hedge.png";
-    this.groundImage.src = "ground.png";
+
     this.renderer = new LevelRenderer(this.game); 
-    }catch(e){}
     this.ratioBlockGU = 1;//0.5;
 }
+
+Maze.prototype.hedgeImage = loadImage("hedge.png");
+Maze.prototype.groundImage = loadImage("ground.png");
 
 Maze.prototype.render = function(ctx, viewport){
 

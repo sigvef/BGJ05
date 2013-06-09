@@ -22,16 +22,6 @@ function Player(x,y,game){
         this.KEYS[i] = false;
     }
 
-    this.personfront = new Image();
-    this.personfront.src = "personfront.png";
-    this.personback = new Image();
-    this.personback.src = "personback.png";
-    
-    this.personside = new Image();
-    this.personside.src = "personside.png";
-        
-    this.personleft = new Image();
-    this.personleft.src = "personleft.png";
     
     this.personimages = {"down": this.personfront, "up": this.personback,
     					 "right": this.personside, "left": this.personleft};
@@ -39,6 +29,11 @@ function Player(x,y,game){
     this.personDirection = "down";
 
 }
+
+Player.prototype.personfront = loadImage("personfront.png");
+Player.prototype.personback = loadImage("personback.png");
+Player.prototype.personside = loadImage("personside.png");
+Player.prototype.personleft = loadImage("personleft.png");
 
 Player.BOMB_PLACE_COOLDOWN = 40;
 Player.FRICTION = 0.8;
@@ -55,6 +50,8 @@ Player.prototype.eatFirefly = function(firefly){
     if(this.hp > Player.MAX_HP){
         this.hp = Player.MAX_HP;
     }
+
+    this.game.sfx.takeFirefly.superplay();
     
 }
 

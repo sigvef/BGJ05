@@ -72,11 +72,19 @@ Firefly.prototype.render = function(ctx, darkctx, viewport){
     var nx = this.x*GU;
     var ny = this.y*GU;
     darkctx.translate(Math.floor(-viewport.x*GU+0.5*GU),Math.floor(-viewport.y*GU+0.5*GU));
+    darkctx.translate(-Firefly.canvas.width/2, -Firefly.canvas.width/2);
+    darkctx.translate(this.x*GU, this.y*GU);
     darkctx.globalCompositeOperation = 'destination-out';
     var scaler = GU/Firefly.canvas.width;
-    darkctx.scale(scaler,scaler);
-    darkctx.drawImage(Firefly.canvas,this.x*GU,this.y*GU);
+    //darkctx.scale(scaler,scaler);
+    darkctx.drawImage(Firefly.canvas,0,0);
     darkctx.restore();
+
+    ctx.save();
+    //ctx.translate(Math.floor(viewport.x*GU+0.5*GU),Math.floor(viewport.y*GU+0.5*GU));
+    ctx.fillStyle = "pink";
+    ctx.fillRect(nx, ny, 20, 20);
+    ctx.restore();
 }
 
 try{

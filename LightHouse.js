@@ -4,9 +4,9 @@ function LightHouse(x, y, size){
     this.size = size;
     this.pulseInterval = 10000;
     this.lastPulse = -1000; //Pulse at the start!
-    this.houseImage = new Image();
-    this.houseImage.src = "lighthouse.png";
 }
+
+LightHouse.prototype.houseImage = loadImage("lighthouse.png");
 
 LightHouse.prototype.update = function(){
     if(t - this.lastPulse > this.pulseInterval){
