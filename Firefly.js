@@ -58,9 +58,6 @@ Firefly.canvas = (function(){
     ctx.arc(x,y,Firefly.AURASIZE*some_largeish_number/2,0,2*Math.PI,false);
     ctx.fill();
 
-    setTimeout(function(){
-        document.body.appendChild(canvas);
-    }, 1000);
 
     return canvas;
 })();
@@ -81,8 +78,8 @@ Firefly.prototype.render = function(ctx, darkctx, viewport){
 
     ctx.save();
     //ctx.translate(Math.floor(viewport.x*GU+0.5*GU),Math.floor(viewport.y*GU+0.5*GU));
-    ctx.fillStyle = "pink";
-    ctx.fillRect(nx, ny, 20, 20);
+    //ctx.fillStyle = "pink";
+    //ctx.fillRect(nx, ny, 20, 20);
     ctx.restore();
 }
 
