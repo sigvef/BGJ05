@@ -21,10 +21,10 @@ GameState.prototype.pause = function(){
 
 GameState.prototype.resume = function(){
     this.maze = new Maze();
-    this.player = new Player(0.25,0.25);
     for(var i = 0; i < this.numFireflies;i++){
         this.fireflies[i] = new Firefly(Math.random()*16, Math.random()*9);//TODO find some better way to do this
     }
+    this.player = new Player(-1.75,0);
 }
 
 GameState.prototype.render = function(ctx){
