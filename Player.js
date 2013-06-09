@@ -38,11 +38,12 @@ Player.prototype.personleft = loadImage("personleft.png");
 Player.BOMB_PLACE_COOLDOWN = 40;
 Player.FRICTION = 0.8;
 Player.SPEED = 0.08;
-Player.START_HP = 0.25;
+Player.START_HP = 0.55;
 Player.FIREFLY_HP_BOOST = 0.05;
-Player.MAX_HP = 4;
-Player.DIMINISHING_LIGHT = 0.001;
+Player.MAX_HP = 2;
+Player.DIMINISHING_LIGHT = 0.002;
 Player.REACH = 0.7;
+Player.RAD_CONSTANT = 3;
 
 Player.canvas = document.createElement('canvas');
 Player.ctx = Player.canvas.getContext('2d');
@@ -148,8 +149,7 @@ Player.prototype.update = function(){
 Player.prototype.render = function(ctx, darkctx, viewport){
     var nx = this.x*GU;//+GU*this.playerSize/2;
     var ny = this.y*GU;//+GU*this.playerSize/2;
-    var r = Math.max(this.hp*GU,0);
-    console.log("radius: "+ r);
+    var r = Player.RAD_CONSTANT*Math.max(this.hp*GU,0);
     Player.canvas.width = darkctx.canvas.width;
     Player.canvas.height = darkctx.canvas.height;
     Player.ctx.translate(Math.floor(-viewport.x*GU+0.5*GU),Math.floor(-viewport.y*GU+0.5*GU));
@@ -166,13 +166,15 @@ Player.prototype.render = function(ctx, darkctx, viewport){
     darkctx.globalCompositeOperation = 'destination-out';
     darkctx.drawImage(Player.canvas,0,0);
 
+    /*
     var rad = ctx.createRadialGradient(nx,ny,0,nx,ny,r);
-    rad.addColorStop(0,'rgba(0,250,0,1)');
+    rad.addColorStop(0,'rgba(0,0,0,1)');
     rad.addColorStop(0.9,'rgba(0,250,255,0.1)');
     rad.addColorStop(1,'rgba(0,255,0,0)');
     ctx.fillStyle = rad;
     ctx.arc(nx,ny,r,0,2*Math.PI,false);
     ctx.fill();
+    */
 
  
     ctx.drawImage(this.personimages[this.personDirection], this.x*GU-GU*this.playerSize/2, 
