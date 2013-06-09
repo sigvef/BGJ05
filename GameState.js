@@ -209,7 +209,7 @@ GameState.prototype.update = function(){
             this.score++;
             //Delete firefly;
             var fire = this.fireflies.pop();
-            if(i < this.bombs.length){
+            if(i < this.fireflies.length){
                 this.fireflies[i--] = fire;
             }
         }
