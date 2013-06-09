@@ -1,4 +1,5 @@
 var io = require('socket.io').listen(8000);
+io.set('log level', 1);
 var connect = require('connect');
 connect.createServer(
     connect.static( require('path').dirname(require.main.filename))
