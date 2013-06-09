@@ -8,7 +8,7 @@ function Maze(game){
     this.game = game;
     this.patternsMatrix = {};
     this.cells = {};
-    blockSize = 1;//0.5;
+    this.blockSize = 1;
     try{
     this.hedgeImage = new Image();
     this.groundImage = new Image();
@@ -21,37 +21,24 @@ function Maze(game){
 
 Maze.prototype.render = function(ctx, viewport){
 
-    var startRow = Math.ceil(viewport.y / blockSize) - 1;
-    var startCol = Math.ceil(viewport.x / blockSize) - 1;
-    var rows = Math.ceil(viewport.height / blockSize) + 1;
-    var cols = Math.ceil(viewport.width / blockSize) + 1;
+    var startRow = Math.ceil(viewport.y / this.blockSize) - 1;
+    var startCol = Math.ceil(viewport.x / this.blockSize) - 1;
+    var rows = Math.ceil(viewport.height / this.blockSize) + 1;
+    var cols = Math.ceil(viewport.width / this.blockSize) + 1;
 
     for (var row = 0; row < rows; ++row) {
         for (var col = 0; col < cols; ++col) {
             this.renderer.renderTile(startRow + row, startCol + col, this, ctx);
         }
     }
-    /*for(var nx = 0; nx < this.internal.length; nx++){
-      for(var ny = 0; ny < this.internal[0].length; ny++){
-      if(this.internal[nx][ny]){
-    //Hedge
-    ctx.drawImage(this.hedgeImage, x+nx*blockSize,y+ny*blockSize,blockSize,blockSize);
-    }else{
-    //Ground
-    ctx.drawImage(this.groundImage, x+nx*blockSize,y+ny*blockSize,blockSize,blockSize);
-    }
-
-    }
-    }*/
 }
 
 Maze.prototype.collide = function(x, y){
-    var blockSize = this.ratioBlockGU*GU;
-    var nx = Math.floor(GU*x/blockSize)|0;
-    var ny = Math.floor(GU*y/blockSize)|0;
-    var cell = this.getCellAt(nx,ny);
+    var col = Math.floor(x/this.blockSize) | 0;
+    var row = Math.floor(y/this.blockSize) | 0;
+    var cell = this.getCellAt(row,col);
     if(cell){
-        return cell.wall;
+        return cell.isWall();
     }else{
         return true;
     }

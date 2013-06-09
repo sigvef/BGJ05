@@ -11,6 +11,7 @@ function GameState(socket, renderable){
     this.numFireflies = 8;
     this.bombs = [];
     this.player_id_counter = 1;
+    this.spawnHouse;
 
     this.menu = false;
 
@@ -94,8 +95,8 @@ GameState.prototype.removePlayer = function(id){
     delete this.players[id];
 }
 
-GameState.prototype.placeBomb = function(x,y,duration){
-    this.bombs.push(new LightBomb({x:x, y:y, duration_in_ms: duration}));
+GameState.prototype.placeBomb = function(x,y,duration, blast_duration){
+    this.bombs.push(new LightBomb({x:x, y:y, duration_in_ms: duration, blast_duration: blast_duration}));
 }
 
 GameState.prototype.init = function(){
@@ -111,78 +112,103 @@ GameState.prototype.resume = function(){
     for(var i = 0; i < this.numFireflies;i++){
         this.fireflies[i] = new Firefly(Math.random()*16, Math.random()*9);//TODO find some better way to do this
     }
+
+    /*
+       var foundSpawn= false;
+       var x = this.maze.blockSize|0;
+       var y = 0;
+       var i = 0;
+       while(!foundSpawn){
+       console.log(""+(x+i)+" "+ y + "")
+       var cell = this.maze.getCellAt(x+i,y);
+       if(!cell.isWall()){
+       foundSpawn = true;
+       }
+       i++;
+       }
+       this.player = new Player(x+i,y);
+       this.spawnHouse = new LightHouse(this.player.x,this.player.y);
+       */
+
 }
 
 GameState.prototype.render = function(ctx){
+    if(!this.renderable) return;
+
+    this.darkvas.width = 16*GU+GU;
+    this.darkvas.height = 9*GU+GU;
+
+    var viewport = {
+        x: (this.players[SELF_ID] || {x:0}).x - 8,
+        y: (this.players[SELF_ID] || {y:0}).y - 4.5,
+        width: 16,
+        height: 9 
+    };
 
 
-    GameState.prototype.render = function(ctx){
-        if(!this.renderable) return;
+    ctx.save();
+    ctx.translate(Math.floor(-viewport.x*GU), Math.floor(-viewport.y*GU));
 
-        this.darkvas.width = 16*GU+GU;
-        this.darkvas.height = 9*GU+GU;
+    for(var i = 0; i<this.numFireflies;i++){
+        this.fireflies[i].render(ctx,this.darkctx, viewport);
+    }
 
-        var viewport = {
-            x: (this.players[SELF_ID] || {x:0}).x - 8,
-            y: (this.players[SELF_ID] || {y:0}).y - 4.5,
-            width: 16,
-            height: 9 
-        };
+    //this.spawnHouse.render(this.darkctx, viewport);
 
-        ctx.save();
-        ctx.translate(Math.floor(-viewport.x*GU), Math.floor(-viewport.y*GU));
+    for(var i=0;i<this.bombs.length;i++){
+        this.bombs[i].render_light(this.darkctx, viewport);
+    }
 
 
-        this.darkctx.fillStyle = 'black';
-        this.darkctx.fillRect(0, 0, 16*GU+GU, 9*GU+GU);
+    this.darkctx.fillStyle = 'black';
+    this.darkctx.fillRect(0, 0, 16*GU+GU, 9*GU+GU);
 
-        this.maze.render(ctx, viewport);
+    this.maze.render(ctx, viewport);
 
-        for(var i = 0; i<this.numFireflies;i++){
-            this.fireflies[i].render(ctx,this.darkctx, viewport);
-        }
-        for(var i=0;i<this.bombs.length;i++){
-            this.bombs[i].render_light(this.darkctx, viewport);
-        }
+    for(var i = 0; i<this.numFireflies;i++){
+        this.fireflies[i].render(ctx,this.darkctx, viewport);
+    }
+    for(var i=0;i<this.bombs.length;i++){
+        this.bombs[i].render_light(this.darkctx, viewport);
+    }
 
-        for(var i in this.players){
-            this.players[i].render(ctx);
-        }
+    for(var i in this.players){
+        this.players[i].render(ctx);
+    }
 
-        ctx.save();
-        ctx.globalAlpha = 0.98;
-        //ctx.drawImage(this.darkvas, viewport.x*GU-0.5*GU, viewport.y*GU-0.5*GU);
-        ctx.restore();
+    ctx.save();
+    ctx.globalAlpha = 0.98;
+    ctx.drawImage(this.darkvas, viewport.x*GU-0.5*GU, viewport.y*GU-0.5*GU);
+    ctx.restore();
 
-        SELF_ID && this.players[SELF_ID].render(ctx);
+    SELF_ID && this.players[SELF_ID].render(ctx);
 
-        for(var i=0;i<this.bombs.length;i++){
-            this.bombs[i].render(ctx);
-        }
+    for(var i=0;i<this.bombs.length;i++){
+        this.bombs[i].render(ctx);
+    }
 
-        ctx.restore();
+    ctx.restore();
 
-        if(this.menu){
-            var padding = 0.5*GU;
-            var width = 8*GU;
+    if(this.menu){
+        var padding = 0.5*GU;
+        var width = 8*GU;
 
-            /* TODO: put some of this in css */
-            this.namefield.style.position = 'fixed';
-            this.namefield.style.zIndex = 99999;
-            this.namefield.style.font = 1*GU + 'px Arial';
-            this.namefield.style.width = width + 'px';
-            this.namefield.style.height = 2*GU + 'px';
-            this.namefield.style.top = window.innerHeight/2 - padding/2 + 'px';
-            this.namefield.style.left = window.innerWidth/2 - width/2 - padding + 'px';
-            this.namefield.style.padding = padding + 'px';
-            this.namefield.style.border = '0';
-            this.namefield.style.background = 'rgba(0,0,0,0.8)';
-            this.namefield.style.color = 'white';
-            this.namefield.style.borderRadius = GU+'px';
-            this.namefield.placeholder = "Enter your name";
+        /* TODO: put some of this in css */
+        this.namefield.style.position = 'fixed';
+        this.namefield.style.zIndex = 99999;
+        this.namefield.style.font = 1*GU + 'px Arial';
+        this.namefield.style.width = width + 'px';
+        this.namefield.style.height = 2*GU + 'px';
+        this.namefield.style.top = window.innerHeight/2 - padding/2 + 'px';
+        this.namefield.style.left = window.innerWidth/2 - width/2 - padding + 'px';
+        this.namefield.style.padding = padding + 'px';
+        this.namefield.style.border = '0';
+        this.namefield.style.background = 'rgba(0,0,0,0.8)';
+        this.namefield.style.color = 'white';
+        this.namefield.style.borderRadius = GU+'px';
+        this.namefield.placeholder = "Enter your name";
 
-            ctx.drawImage(this.titleImage, 0, 0, 16*GU, 9*GU);
-        }
+        ctx.drawImage(this.titleImage, 0, 0, 16*GU, 9*GU);
     }
 }
 
@@ -216,6 +242,7 @@ GameState.prototype.update = function(){
     for(var i in this.players){
         this.players[i].update();
     }
+    //this.spawnHouse.update();
 
     for(var i = 0; i<this.numFireflies;i++){
         this.fireflies[i].update();

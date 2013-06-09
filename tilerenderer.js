@@ -30,7 +30,11 @@ TileRenderer.prototype.isWall = function(x,y){
 };
 
 TileRenderer.prototype.isPath = function(x,y){
-    return this.neighbours[x+1][y+1].isPath();
+    if(this.neighbours[x+1][y+1]){
+        return this.neighbours[x+1][y+1].isPath();
+    }else{
+        return false;
+    }
 };
 
 TileRenderer.prototype.fits = function(arr){
@@ -47,9 +51,11 @@ TileRenderer.prototype.fits = function(arr){
 };
 
 TileRenderer.prototype.blit = function(sprite, srcX, srcY){
-//    this.context.drawImage(sprite, /*srcX, srcY, blockSize*GU, blockSize*GU,*/ 
-//            this.render_col*blockSize*GU, this.render_row*blockSize*GU, blockSize*GU, blockSize*GU);*/
+    var blockSize = this.world.blockSize;
     this.context.drawImage(sprite, this.render_col*blockSize*GU, this.render_row*blockSize*GU, blockSize*GU, blockSize*GU);
+    //this.context.drawImage(sprite, srcX, srcY, blockSize*GU, blockSize*GU, 
+            //this.render_col*blockSize*GU, this.render_row*blockSize*GU, blockSize*GU, blockSize*GU);
+   // this.context.fillText(this.render_col+","+this.render_row,this.render_col*blockSize*GU, this.render_row*blockSize*GU, blockSize*GU, blockSize*GU);
 
 };
 
@@ -81,12 +87,12 @@ TileRenderer.prototype.render = function(render_row, render_col){
 }*/
 
 TileRenderer.prototype.renderWall = function(){
-    /*var idx = 0;
+    var idx = 0;
     if (this.isPath(-1,0))  idx += 1;
     if (this.isPath(0,1))   idx += 2;
     if (this.isPath(1,0))   idx += 4;
-    if (this.isPath(0,-1))  idx += 8;*/
-    this.blit(this.renderer.wall,0 ,0); // idx * 16);
+    if (this.isPath(0,-1))  idx += 8;
+    this.blit(this.renderer.wall,0 , idx * 16);
 };
 
 TileRenderer.prototype.renderRoad = function(){

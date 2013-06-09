@@ -27,7 +27,7 @@ function Player(game, params){
     this.KEYS.RIGHT = 39;
 
     this.playerSize = 0.5;
-    this.hitBox = 0;//.15;
+    this.hitBox = 0.05;
 
     for(var i=0;i<256;i++){
         this.KEYS[i] = false;
@@ -80,7 +80,7 @@ Player.prototype.update = function(){
     }
 
     if(this.KEYS[this.KEYS.SPACE] && this.bomb_place_cooldown == 0){
-        this.game.placeBomb(this.x, this.y, 999);
+        this.game.placeBomb(this.x, this.y, 999, 3000);
         this.bomb_place_cooldown = Player.BOMB_PLACE_COOLDOWN;
     }
 
