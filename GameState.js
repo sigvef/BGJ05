@@ -1,11 +1,14 @@
 try{
     var Maze = require('./Maze');
     var LightBomb = require('./LightBomb');
+    var Firefly = require('./Firefly');
 }catch(e){}
 
 function GameState(socket, renderable){
     this.maze = {};
     this.players = {};
+    this.fireflies = [];
+    this.numFireflies = 8;
     this.bombs = [];
     this.player_id_counter = 1;
 
@@ -83,8 +86,8 @@ GameState.prototype.loadKeyframe = function(keyframe){
 GameState.prototype.addPlayer = function(player){
     player.id = this.player_id_counter++; 
     player.color = {r: Math.random()*256|0, g: Math.random()*256|0, b: Math.random()*256|0};
-    player.x = 0.25;
-    player.y = 0.25;
+    player.x = 1;
+    player.y = 1;
     this.players[player.id] = player;
 }
 
@@ -105,25 +108,43 @@ GameState.prototype.pause = function(){
 GameState.prototype.resume = function(){
     this.maze = new Maze();
     this.connect && this.connect();
+
+    for(var i = 0; i < this.numFireflies;i++){
+        this.fireflies[i] = new Firefly(Math.random()*16, Math.random()*9);//TODO find some better way to do this
+    }
 }
 
 GameState.prototype.render = function(ctx){
 
-    if(this.renderable){
 
-        this.darkvas.width = 16*GU;
-        this.darkvas.height = 9*GU;
+    GameState.prototype.render = function(ctx){
+        if(!this.renderable) return;
+
+        this.darkvas.width = 16*GU+GU;
+        this.darkvas.height = 9*GU+GU;
+
+        var viewport = {
+            x: (this.players[SELF_ID] || {x:0}).x - 8,
+            y: (this.players[SELF_ID] || {y:0}).y - 4.5,
+            width: 16,
+            height: 9 
+        };
+
+        ctx.save();
+        ctx.translate(Math.floor(-viewport.x*GU), Math.floor(-viewport.y*GU));
+
 
         this.darkctx.fillStyle = 'black';
-        this.darkctx.fillRect(0,0, 16*GU, 9*GU);
+        this.darkctx.fillRect(0, 0, 16*GU+GU, 9*GU+GU);
 
-        this.maze.render(ctx, 0, 0, 16, 9);
+        this.maze.render(ctx, viewport);
 
-        /*
-        for(var i=0;i<this.bombs.length;i++){
-            this.bombs[i].render_light(this.darkctx);
+        for(var i = 0; i<this.numFireflies;i++){
+            this.fireflies[i].render(ctx,this.darkctx, viewport);
         }
-        */
+        for(var i=0;i<this.bombs.length;i++){
+            this.bombs[i].render_light(this.darkctx, viewport);
+        }
 
         for(var i in this.players){
             this.players[i].render(ctx);
@@ -131,7 +152,7 @@ GameState.prototype.render = function(ctx){
 
         ctx.save();
         ctx.globalAlpha = 0.98;
-        //ctx.drawImage(this.darkvas, 0, 0);
+        //ctx.drawImage(this.darkvas, viewport.x*GU-0.5*GU, viewport.y*GU-0.5*GU);
         ctx.restore();
 
         SELF_ID && this.players[SELF_ID].render(ctx);
@@ -139,6 +160,8 @@ GameState.prototype.render = function(ctx){
         for(var i=0;i<this.bombs.length;i++){
             this.bombs[i].render(ctx);
         }
+
+        ctx.restore();
 
         if(this.menu){
             var padding = 0.5*GU;
@@ -193,6 +216,10 @@ GameState.prototype.update = function(){
 
     for(var i in this.players){
         this.players[i].update();
+    }
+
+    for(var i = 0; i<this.numFireflies;i++){
+        this.fireflies[i].update();
     }
 
     for(var i=0;i<this.bombs.length;i++){

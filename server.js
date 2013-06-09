@@ -2,7 +2,9 @@ var io = require('socket.io').listen(8000);
 var GameState = require('./GameState');
 var Player = require('./Player');
 var LightBomb = require('./LightBomb');
+var Firefly = require('./Firefly');
 GU = 1;
+t = + new Date();
 
 var game = new GameState();
 

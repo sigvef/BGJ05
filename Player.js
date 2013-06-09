@@ -27,7 +27,7 @@ function Player(game, params){
     this.KEYS.RIGHT = 39;
 
     this.playerSize = 0.5;
-    this.hitBox = 0.15;
+    this.hitBox = 0;//.15;
 
     for(var i=0;i<256;i++){
         this.KEYS[i] = false;
@@ -112,7 +112,7 @@ Player.prototype.update = function(){
                 ){
             this.x = lastx;
             this.dx = 0;
-            console.log("hit x");
+            //console.log("hit x");
         }
 
         //collision in y direction
@@ -123,7 +123,7 @@ Player.prototype.update = function(){
                 ){
             this.y = lasty;
             this.dy = 0;
-            console.log("hit y");
+            //console.log("hit y");
 
         }
     }
