@@ -28,8 +28,8 @@ Maze.prototype.render = function(ctx, viewport){
 }
 
 Maze.prototype.collide = function(x, y){
-    var col = (x/this.blockSize) | 0;
-    var row = (y/this.blockSize) | 0;
+    var col = Math.floor(x/this.blockSize) | 0;
+    var row = Math.floor(y/this.blockSize) | 0;
     var cell = this.getCellAt(row,col);
     return cell.isWall();
 }
