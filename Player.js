@@ -1,4 +1,5 @@
-function Player(x,y){
+function Player(x,y, gamestate){
+    this.gamestate = gamestate;
     this.x = x || 0;
     this.y = y || 0;
     this.dx = 0;
@@ -38,6 +39,11 @@ Player.canvas = document.createElement('canvas');
 Player.ctx = Player.canvas.getContext('2d');
 
 Player.prototype.update = function(){
+
+
+    if(this.gamestate.getPlayerLight() > 250){
+        this.hp -= 0.001;
+    }
 
     if(KEYS[KEYS.LEFT]){
         this.dx = -1;
