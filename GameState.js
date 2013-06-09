@@ -51,7 +51,7 @@ GameState.prototype.resume = function(){
     for(var i = 0; i < this.numFireflies;i++){
         this.fireflies[i] = new Firefly(Math.random()*16, Math.random()*9);//TODO find some better way to do this
     }
-    this.player = new Player(this, 0,0);
+    this.player = new Player(0,0, this);
     //this.spawnHouse = new LightHouse(this.player.x,this.player.y);
     this.spawnHouse = this.createLightHouse(this.player.x,this.player.y, this.spawnSize);
 
@@ -154,6 +154,11 @@ GameState.prototype.render = function(ctx){
 
         ctx.drawImage(this.titleImage, 0, 0, 16*GU, 9*GU);
     }
+}
+
+GameState.prototype.getPlayerLight = function(){
+    if(this.darkctx == undefined) return 0;
+    return this.darkctx.getImageData(8*GU, 4.5*GU,1,1).data[3];
 }
 
 GameState.prototype.showMenu = function(){
