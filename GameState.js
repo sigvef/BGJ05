@@ -149,9 +149,10 @@ GameState.prototype.render = function(ctx){
     for(var i=0;i<this.bombs.length;i++){
         this.bombs[i].render(ctx);
     }
-    
+
+    ctx.font = "30px Arial";
     ctx.fillStyle = "white";
-    ctx.fillText(this.score, viewport.x*GU+1*GU, viewport.y*GU+7.5*GU);
+    ctx.fillText(this.score, viewport.x*GU+7.5*GU, viewport.y*GU+0.5*GU);
     ctx.restore();
 
     if(this.menu){
