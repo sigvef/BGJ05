@@ -28,7 +28,7 @@ function clamp(low, x, high){
 
 function blur(ctx){
     var amount = 2;
-    var times = 8;
+    var times = 16;
 
     while(times --> 0){
         ctx.scale(1/amount, 1/amount);
@@ -63,6 +63,7 @@ function loop(){
     }
     /* clearing canvas */
     canvas.width = canvas.width;
+
 
     if(BLUR){
         blurcanvas.width = blurcanvas.width;
