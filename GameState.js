@@ -8,11 +8,15 @@ function GameState(socket, renderable){
     this.maze = {};
     this.fireflies = [];
     this.numFireflies = 8;
+    this.fireflyAddProb = 0.2;
     this.bombs = [];
     this.player_id_counter = 1;
     this.spawnHouse;
     this.spawnSize = 4;
+    this.lightHouses = [];
+    this.numLightHouses = 0;
     this.lightHouseSize = 2;
+    this.lightHouseAddProb = 0.008;
 
     this.menu = false;
 
@@ -64,13 +68,14 @@ GameState.prototype.createLightHouse = function(x,y,size){
     var row = Math.floor(y/this.maze.blockSize)-size/2 | 0;
     for(var i=0;i<size;i++){
         for(var j=0;j<size;j++){
-            var posx = col+i;
-            var posy = row+j;
-            cell = this.maze.getCellAt(posx,posy);
+            var posx = col+i|0;
+            var posy = row+j|0;
+            cell = this.maze.getCellAt(posy,posx);
             cell.setAsPath();
         }
     }
-    return new LightHouse(col-0.5,row-0.5, size+1);
+    this.lightHouses[this.numLightHouses] = new LightHouse(col-1-0.5,row-0.5, size+1);//This is ugly, should be fixed
+    this.numLightHouses++;
 }
 
 GameState.prototype.addFirefly = function(x,y){
@@ -78,12 +83,20 @@ GameState.prototype.addFirefly = function(x,y){
     this.numFireflies++;
 }
 GameState.prototype.onNewCell = function(row,col){
-    var addProb = 0.2;
+    //adding fireflies
+    var addProb = this.fireflyAddProb;
     var p = Math.random();
     if(addProb > p){
         var x = Math.random();
         var y = Math.random();
-        this.addFirefly(row+x,col+y); 
+        this.addFirefly(col+x,row+y); 
+    }
+    //adding lighthouses
+    addProb = this.lightHouseAddProb;
+    p = Math.random();
+    if(addProb > p){
+        console.log("Generated a lightHouse at: " + col + " " + row);
+        this.createLightHouse(col,row,this.lightHouseSize);
     }
 }
 
@@ -115,8 +128,9 @@ GameState.prototype.render = function(ctx){
         if(this.fireflies[i] == undefined) continue;
         this.fireflies[i].render(ctx,this.darkctx, viewport);
     }
-
-    this.spawnHouse.render(this.darkctx, viewport);
+    for(var i=0;i<this.numLightHouses;i++){
+        this.lightHouses[i].render(this.darkctx,viewport);
+    }
 
     for(var i=0;i<this.bombs.length;i++){
         this.bombs[i].render_light(this.darkctx, viewport);
@@ -169,6 +183,7 @@ GameState.prototype.showMenu = function(){
 
     document.removeEventListener('keydown', this.keydownGameListener);
     document.removeEventListener('keyup', this.keyupGameListener);
+    BLUR = true;
     this.menu = true;
 }
 
@@ -179,6 +194,7 @@ GameState.prototype.hideMenu = function(){
     document.addEventListener('keyup', this.keyupGameListener);
     document.body.removeChild(this.namefield);
     SELF_NAME = this.namefield.value;
+    BLUR = false;
     this.menu = false;
 }
 
@@ -191,7 +207,6 @@ GameState.prototype.update = function(){
 
     this.player.update();
 
-    this.spawnHouse.update();
 
     var firefly;
     for(var i = 0; i<this.fireflies.length;i++){
@@ -209,6 +224,9 @@ GameState.prototype.update = function(){
                 this.fireflies[i--] = firefly;
             }
         }
+    }
+    for(var i = 0; i<this.numLightHouses;i++){
+        this.lightHouses[i].update();
     }
 
     for(var i=0;i<this.bombs.length;i++){

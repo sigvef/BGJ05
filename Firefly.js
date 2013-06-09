@@ -4,7 +4,6 @@ function Firefly(x,y){
     this.dx = 0;
     this.dy = 0;
     this.size = 0.02;
-    this.auraSize = .80;
     this.direction = 0;
     //inerval between jumps in ms
     this.scootchInterval = 2000 + 500*Math.random();
@@ -13,11 +12,10 @@ function Firefly(x,y){
 
 }
 
+Firefly.AURASIZE = .80;
 Firefly.FRICTION = 0.8;
 Firefly.SPEED = 0.08;
 try{
-Firefly.canvas = document.createElement('canvas');
-Firefly.ctx = Firefly.canvas.getContext('2d');
 }catch(e){}
 
 Firefly.prototype.update = function(){
@@ -42,33 +40,43 @@ Firefly.prototype.update = function(){
 
 }
 
-Firefly.prototype.render = function(ctx, darkctx, viewport){
+Firefly.canvas = (function(){
+    var canvas = document.createElement('canvas');
+    var ctx = canvas.getContext('2d');
     //firefly light
-    var nx = this.x*GU;
-    var ny = this.y*GU;
-    var r = this.auraSize*GU;
-    Firefly.canvas.width = darkctx.canvas.width;
-    Firefly.canvas.height = darkctx.canvas.height;
-    Firefly.ctx.translate(Math.floor(-viewport.x*GU+0.5*GU),Math.floor(-viewport.y*GU+0.5*GU));
-    //Firefly.ctx.fillStyle = 'rgba(255,255,255,' + square_interpolation(1,0,1) +')';
-    Firefly.ctx.beginPath();
-    var rad = Firefly.ctx.createRadialGradient(nx,ny,0,nx,ny,r);
-    rad.addColorStop(0,'rgba(255,255,255,1)');
-    rad.addColorStop(0.2,'rgba(255,255,255,0.2)');
-    rad.addColorStop(1,'rgba(255,255,255,0)');
-    Firefly.ctx.fillStyle = rad;
-    Firefly.ctx.arc(this.x*GU,this.y*GU,this.auraSize*GU,0,2*Math.PI,false);
-    Firefly.ctx.fill();
-    Firefly.ctx.globalCompositeOperation = 'destination-out';
-
-    //the firefly
-    ctx.fillStyle = "white";//well, this line seems to do nothing. no idea why.
+    var some_largeish_number = 100;
+    var r = Firefly.AURASIZE*some_largeish_number/2;
+    canvas.width = Firefly.AURASIZE*some_largeish_number;
+    canvas.height = canvas.width;
+    var x = canvas.width/2;
+    var y = canvas.height/2;
+    var rad = ctx.createRadialGradient(x,y,0,x,y,r);
     ctx.beginPath();
-    ctx.arc(this.x*GU,this.y*GU,this.size*GU,0,2*Math.PI,false);
+    rad.addColorStop(0,'rgba(255,255,255,1)');
+    rad.addColorStop(0.2,'rgba(255,255,255,0.1)');
+    rad.addColorStop(1,'rgba(255,255,255,0)');
+    ctx.fillStyle = rad;
+    ctx.arc(x,y,Firefly.AURASIZE*some_largeish_number/2,0,2*Math.PI,false);
     ctx.fill();
 
+    setTimeout(function(){
+        document.body.appendChild(canvas);
+    }, 1000);
+
+    return canvas;
+})();
+
+Firefly.prototype.render = function(ctx, darkctx, viewport){
+
+    darkctx.save();
+    var nx = this.x*GU;
+    var ny = this.y*GU;
+    darkctx.translate(Math.floor(-viewport.x*GU+0.5*GU),Math.floor(-viewport.y*GU+0.5*GU));
     darkctx.globalCompositeOperation = 'destination-out';
-    darkctx.drawImage(Firefly.canvas,0,0);
+    var scaler = GU/Firefly.canvas.width;
+    darkctx.scale(scaler,scaler);
+    darkctx.drawImage(Firefly.canvas,this.x*GU,this.y*GU);
+    darkctx.restore();
 }
 
 try{
