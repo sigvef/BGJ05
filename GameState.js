@@ -29,9 +29,7 @@ function GameState(socket, renderable){
 
     var that = this;
     this.keydownMenuListener = function(e){
-        if(e.keyCode == 13) { //enter
-            that.hideMenu();
-        }
+        that.hideMenu();
     }
 }
 
@@ -149,23 +147,15 @@ GameState.prototype.render = function(ctx){
     for(var i=0;i<this.bombs.length;i++){
         this.bombs[i].render(ctx);
     }
-    
+
+    ctx.font = "30px Arial";
     ctx.fillStyle = "white";
-    ctx.fillText(this.score, viewport.x*GU+1*GU, viewport.y*GU+7.5*GU);
+    ctx.fillText(this.score, viewport.x*GU+7.5*GU, viewport.y*GU+0.5*GU);
     ctx.restore();
 
     if(this.menu){
-        var padding = 0.5*GU;
-        var width = 8*GU;
-
-        /* TODO: put some of this in css */
-        this.menuDiv.style.width = width + 'px';
-        this.menuDiv.style.height = 2*GU + 'px';
-        this.menuDiv.style.padding = padding + 'px';
-        this.menuDiv.style.top = window.innerHeight/2 - padding/2 + 'px';
-        this.menuDiv.style.left = window.innerWidth/2 - width/2 - padding + 'px';
-        this.menuDiv.style.borderRadius = GU+'px';
-
+        ctx.fillStyle = 'rgba(0,0,0,0.9)';
+        ctx.fillRect(0,0, 16*GU, 9*GU);
         ctx.drawImage(this.titleImage, 0, 0, 16*GU, 9*GU);
     }
 }
