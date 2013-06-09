@@ -1,7 +1,7 @@
-function LightHouse(x, y){
+function LightHouse(x, y, size){
     this.x = x;
     this.y = y;
-    this.size = 2;
+    this.size = size;
     this.pulseInterval = 10000;
     this.lastPulse = -1000; //Pulse at the start!
     this.houseImage = new Image();
