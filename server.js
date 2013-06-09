@@ -1,4 +1,8 @@
 var io = require('socket.io').listen(8000);
+var connect = require('connect');
+connect.createServer(
+    connect.static( require('path').dirname(require.main.filename))
+).listen(8080);
 var GameState = require('./GameState');
 var Player = require('./Player');
 var LightBomb = require('./LightBomb');
