@@ -76,12 +76,14 @@ Player.prototype.eatFirefly = function(firefly){
 Player.prototype.update = function(){
     var val = 2.6;
     if(Math.abs(this.x) > val || Math.abs(this.y) > val)
+        this.hp -= Player.DIMINISHING_LIGHT;
 
     if(this.hp <= 0){
         localStorage.score = this.game.score;
         localStorage.bestScore = Math.max(this.game.score, +localStorage.bestScore);
         sm.changeState('game');
     }
+
 
     if(this.KEYS[this.KEYS.LEFT]){
         this.dx = -1;
