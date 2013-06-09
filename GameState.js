@@ -33,10 +33,11 @@ function GameState(socket, renderable){
 }
 
 
-this.createFrame = function(){
+GameState.prototype.createFrame = function(){
     var frame = {};
+    frame.players = {};
     for(var i in this.players){
-        keyframe.players[i] = this.players[i].serialize();
+        frame.players[i] = this.players[i].serialize();
     }
     return frame;
 }
@@ -59,10 +60,9 @@ GameState.prototype.createKeyframe = function(){
 }
 
 GameState.prototype.loadFrame = function(frame){
-    this.players = {};
-    for(var i in keyframe.players){
-        for(var j in keyframe.players[i]){
-            this.players[i][j] = keyframe.players[i][j];
+    for(var i in frame.players){
+        for(var j in frame.players[i]){
+            this.players[i][j] = frame.players[i][j];
         }
     }
 }

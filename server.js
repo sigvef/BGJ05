@@ -33,8 +33,15 @@ io.sockets.on('connection', function (socket) {
     game.addPlayer(player);
     socket.emit('id', player.id);
 
-    sendKeyframe(socket);
+    for(var i=0;i<game.players.length;i++){
+        if(game.players[i].id != player.id){
+            game.players[i].socket.emit('add player', player.id);
+        }
+    }
+
     sendEntireMaze(socket);
+    sendKeyframe(socket);
+
 
     socket.on('keydown', function(keyCode){
         player.KEYS[keyCode] = true;
@@ -54,7 +61,10 @@ io.sockets.on('connection', function (socket) {
     socket.on('disconnect', function(){
         console.log('a player has disconnected');
         game.removePlayer(player.id);
-        socket.emit('remove player', player.id);
+
+        for(var i=0;i<game.players.length;i++){
+            game.players[i].socket.emit('remove player', player.id);
+        }
     });
 });
 
@@ -74,7 +84,7 @@ setTimeout(function loop(){
 
     var keyframe = game.createKeyframe();
     for(var i in game.players){
-        sendKeyframe(game.players[i].socket);
+        sendFrame(game.players[i].socket);
     }
 
     setTimeout(loop, 0);

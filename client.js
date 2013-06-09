@@ -115,7 +115,7 @@ function client(){
         });
 
         socket.on('frame', function(frame){
-            game.loadFrame(eyframe);
+            game.loadFrame(frame);
         });
 
         socket.on('maze', function(maze){
