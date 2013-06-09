@@ -39,9 +39,9 @@ Player.BOMB_PLACE_COOLDOWN = 40;
 Player.FRICTION = 0.8;
 Player.SPEED = 0.08;
 Player.START_HP = 0.55;
-Player.FIREFLY_HP_BOOST = 0.025;
+Player.FIREFLY_HP_BOOST = 0.050;
 Player.MAX_HP = 2;
-Player.DIMINISHING_LIGHT = 0.008;
+Player.DIMINISHING_LIGHT = 0.0005;
 Player.REACH = 0.7;
 Player.RAD_CONSTANT = 3;
 
@@ -74,15 +74,13 @@ Player.prototype.eatFirefly = function(firefly){
 }
 
 Player.prototype.update = function(){
+    var val = 2.6;
+    if(Math.abs(this.x) > val || Math.abs(this.y) > val)
 
     if(this.hp <= 0){
         localStorage.score = this.game.score;
         localStorage.bestScore = Math.max(this.game.score, +localStorage.bestScore);
         sm.changeState('game');
-    }
-
-    if(this.game.getPlayerLight() > 250){
-        this.hp -= Player.DIMINISHING_LIGHT;
     }
 
     if(this.KEYS[this.KEYS.LEFT]){
