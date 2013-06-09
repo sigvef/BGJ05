@@ -61,7 +61,7 @@ GameState.prototype.render = function(ctx){
 
     this.maze.render(ctx, viewport);
 
-    this.player.render(ctx);
+    this.player.render(ctx,darkctx);
     for(var i = 0; i<this.numFireflies;i++){
         this.fireflies[i].render(ctx,this.darkctx, viewport);
     }
