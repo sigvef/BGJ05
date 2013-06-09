@@ -1,15 +1,16 @@
-function Maze(){
+function Maze(game){
 
     /* internal is some internal representation of the maze,
        either a graph or an array of cells or whatever is best */
     this.patternsMatrix = {};
+    this.game = game;
     this.cells = {};
     this.blockSize = 1;
     this.hedgeImage = new Image();
     this.groundImage = new Image();
     this.hedgeImage.src = "hedge.png";
     this.groundImage.src = "ground.png";
-    this.renderer = new LevelRenderer(); 
+    this.renderer = new LevelRenderer(this.game); 
 
 }
 
@@ -56,6 +57,7 @@ Maze.prototype.getCellAt = function(global_row, global_col) {
     if (!this.cellExists(global_row, global_col)) {
         var pattern_coord = Pattern.translateGlobalToPattern(global_row, global_col);
         pattern = this.generatePatternFor(pattern_coord);
+        this.game.onNewCell(global_row,global_col);
 
         for (var internal_row = 0; internal_row < 3; internal_row++) {
             for (var internal_col = 0; internal_col < 3; internal_col++) {
@@ -143,7 +145,7 @@ Maze.prototype.generatePatternFor = function(coord) {
 
 Maze.prototype.renderTile = function(row, col, world, context){
         if (!([row,col] in this.tileRenderers)) {
-                this.tileRenderers[[row,col]] = new TileRenderer(row, col, world, context, this);
+                this.tileRenderers[[row,col]] = new TileRenderer(row, col, world, context, this, this.game);
                     }
         this.tileRenderers[[row,col]].render(row, col);
 };
