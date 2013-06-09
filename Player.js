@@ -146,7 +146,7 @@ Player.prototype.render = function(ctx){
 }
 
 Player.prototype.serialize = function(){
-    return {id: this.id, name: this.name, x: this.x, y: this.y, dx: this.dx, dy: this.dy, color: this.color,
+    return {id: this.id, name: this.name, x: this.x, y: this.y,
             personDirection: this.personDirection};
 }
 
