@@ -55,12 +55,12 @@ Player.prototype.eatFirefly = function(firefly){
     }
 
 
-    if(this.game.score % 5 != 1){
-        this.game.sfx.takeFirefly.superplay();
-    }else{
+    if(this.game.score % 5 == 4){
         this.game.sfx.celebrate.superplay();
+        this.game.textalizer = 50;
+    }else{
+        this.game.sfx.takeFirefly.superplay();
     }
-    
 }
 
 Player.prototype.update = function(){
