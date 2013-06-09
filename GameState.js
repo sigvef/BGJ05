@@ -7,7 +7,6 @@ try{
 function GameState(socket, renderable){
     this.maze = {};
     this.fireflies = [];
-    this.numFireflies = 8;
     this.fireflyAddProb = 0.2;
     this.bombs = [];
     this.player_id_counter = 1;
@@ -18,6 +17,7 @@ function GameState(socket, renderable){
     this.numLightHouses = 0;
     this.lightHouseSize = 2;
     this.lightHouseAddProb = 0.008;
+    this.score = 0;
 
     this.menu = false;
 
@@ -52,7 +52,7 @@ GameState.prototype.pause = function(){
 
 GameState.prototype.resume = function(){
     this.maze = new Maze(this);
-    for(var i = 0; i < this.numFireflies;i++){
+    for(var i = 0; i < this.fireflies.length;i++){
         this.fireflies[i] = new Firefly(Math.random()*16, Math.random()*9);//TODO find some better way to do this
     }
     this.player = new Player(0,0, this);
@@ -79,8 +79,7 @@ GameState.prototype.createLightHouse = function(x,y,size){
 }
 
 GameState.prototype.addFirefly = function(x,y){
-    this.fireflies[this.numFireflies] = new Firefly(x,y);
-    this.numFireflies++;
+    this.fireflies.push(new Firefly(x,y));
 }
 GameState.prototype.onNewCell = function(row,col){
     //adding fireflies
@@ -131,7 +130,7 @@ GameState.prototype.render = function(ctx){
         if(this.fireflies[i] == undefined) continue;
         this.fireflies[i].render(ctx,this.darkctx, viewport);
     }
-    for(var i=0;i<this.numLightHouses;i++){
+    for(var i=0;i<this.lightHouses.length;i++){
         this.lightHouses[i].render(this.darkctx,viewport);
     }
 
@@ -148,7 +147,9 @@ GameState.prototype.render = function(ctx){
     for(var i=0;i<this.bombs.length;i++){
         this.bombs[i].render(ctx);
     }
-
+    
+    ctx.fillStyle = "white";
+    ctx.fillText(this.score, viewport.x*GU+1*GU, viewport.y*GU+7.5*GU);
     ctx.restore();
 
     if(this.menu){
@@ -196,7 +197,7 @@ GameState.prototype.update = function(){
 
 
     var firefly;
-    for(var i = 0; i<this.fireflies.length;i++){
+    for(var i = 0; i < this.fireflies.length;i++){
         firefly = this.fireflies[i];
         if(firefly == undefined) continue;
         firefly.update();
@@ -205,10 +206,11 @@ GameState.prototype.update = function(){
                 && Math.abs(firefly.y-this.player.y) < this.player.playerSize){
             
             this.player.eatFirefly(firefly);
+            this.score++;
             //Delete firefly;
-            firefly = this.fireflies.pop();
+            var fire = this.fireflies.pop();
             if(i < this.bombs.length){
-                this.fireflies[i--] = firefly;
+                this.fireflies[i--] = fire;
             }
         }
     }

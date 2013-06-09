@@ -9,7 +9,6 @@ function Firefly(x,y){
     this.scootchInterval = 2000 + 500*Math.random();
     //time of last jump in ms
     this.lastScootch = t + 2000*Math.random();
-
 }
 
 Firefly.AURASIZE = .80;
