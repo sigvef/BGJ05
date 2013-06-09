@@ -56,7 +56,7 @@ GameState.prototype.render = function(ctx){
 
     ctx.save();
     ctx.globalAlpha = 0.98;
-    //ctx.drawImage(this.darkvas, viewport.x*GU-0.5*GU, viewport.y*GU-0.5*GU);
+    ctx.drawImage(this.darkvas, viewport.x*GU-0.5*GU, viewport.y*GU-0.5*GU);
     ctx.restore();
 
     
