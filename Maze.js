@@ -8,7 +8,7 @@ function Maze(game){
     this.game = game;
     this.patternsMatrix = {};
     this.cells = {};
-    blockSize = 0.5;
+    blockSize = 1;//0.5;
     try{
     this.hedgeImage = new Image();
     this.groundImage = new Image();
@@ -16,7 +16,7 @@ function Maze(game){
     this.groundImage.src = "ground.png";
     this.renderer = new LevelRenderer(); 
     }catch(e){}
-    this.ratioBlockGU = 0.5
+    this.ratioBlockGU = 1;//0.5;
 }
 
 Maze.prototype.render = function(ctx, viewport){
