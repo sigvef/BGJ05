@@ -33,6 +33,8 @@ function GameState(socket, renderable){
     }
 }
 
+GameState.FIREFLY_DIMINISHING_RATIO = 0.003;
+
 GameState.prototype.sfx = {
     takeFirefly: loadAudio('take-firefly.ogg'),
     celebrate: loadAudio('celebrate.ogg')
@@ -83,7 +85,8 @@ GameState.prototype.addFirefly = function(x,y){
 }
 GameState.prototype.onNewCell = function(row,col){
     //adding fireflies
-    var addProb = this.fireflyAddProb;
+    var dist = Math.abs(row)+Math.abs(col);
+    var addProb = Math.max(this.fireflyAddProb - GameState.FIREFLY_DIMINISHING_RATIO*dist,0);
     var p = Math.random();
     if(addProb > p){
         var x = Math.random();
