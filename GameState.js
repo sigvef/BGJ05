@@ -21,7 +21,7 @@ function GameState(socket, renderable){
     if(this.renderable){
         this.darkvas = document.createElement('canvas');
         this.darkctx = this.darkvas.getContext('2d');
-        this.namefield = document.createElement('input');
+        this.menuDiv = document.getElementById('menuDiv');
         this.titleImage = new Image();
         this.titleImage.src = "title.png";
     }
@@ -138,19 +138,12 @@ GameState.prototype.render = function(ctx){
         var width = 8*GU;
 
         /* TODO: put some of this in css */
-        this.namefield.style.position = 'fixed';
-        this.namefield.style.zIndex = 99999;
-        this.namefield.style.font = 1*GU + 'px Arial';
-        this.namefield.style.width = width + 'px';
-        this.namefield.style.height = 2*GU + 'px';
-        this.namefield.style.top = window.innerHeight/2 - padding/2 + 'px';
-        this.namefield.style.left = window.innerWidth/2 - width/2 - padding + 'px';
-        this.namefield.style.padding = padding + 'px';
-        this.namefield.style.border = '0';
-        this.namefield.style.background = 'rgba(0,0,0,0.8)';
-        this.namefield.style.color = 'white';
-        this.namefield.style.borderRadius = GU+'px';
-        this.namefield.placeholder = "Enter your name";
+        this.menuDiv.style.width = width + 'px';
+        this.menuDiv.style.height = 2*GU + 'px';
+        this.menuDiv.style.padding = padding + 'px';
+        this.menuDiv.style.top = window.innerHeight/2 - padding/2 + 'px';
+        this.menuDiv.style.left = window.innerWidth/2 - width/2 - padding + 'px';
+        this.menuDiv.style.borderRadius = GU+'px';
 
         ctx.drawImage(this.titleImage, 0, 0, 16*GU, 9*GU);
     }
@@ -162,9 +155,9 @@ GameState.prototype.getPlayerLight = function(){
 }
 
 GameState.prototype.showMenu = function(){
+    console.log("SHOWMENU");
     document.addEventListener('keydown', this.keydownMenuListener);
-    document.body.appendChild(this.namefield);
-    this.namefield.focus();
+    this.menuDiv.style.display = 'block';
 
     document.removeEventListener('keydown', this.keydownGameListener);
     document.removeEventListener('keyup', this.keyupGameListener);
@@ -173,13 +166,13 @@ GameState.prototype.showMenu = function(){
 }
 
 GameState.prototype.hideMenu = function(){
+    this.menuDiv.style.display = 'none';
     console.log("HIDEMENU");
     document.removeEventListener('keydown', this.keydownMenuListener);
     document.addEventListener('keydown', this.keydownGameListener);
     document.addEventListener('keyup', this.keyupGameListener);
-    document.body.removeChild(this.namefield);
-    SELF_NAME = this.namefield.value;
     BLUR = false;
+    SELF_NAME = "this has to be set to something random as an ugly hack, yo";
     this.menu = false;
 }
 

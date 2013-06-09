@@ -39,6 +39,18 @@
                 overflow:hidden;
                 background:black;
             }
+
+            #menuDiv{
+                display: none;
+                position: fixed;
+                z-index: 99999;
+                border: 0;
+                background: rgba(0,0,0,0.9);
+                color: white;
+                font-family: Arial;
+            }
+
+
         </style>
     </head>
     <body onload="client()">
@@ -46,6 +58,18 @@
             <source src=lights.mp3 />
             <source src=lights.ogg />
         </audio>
+        <div id=menuDiv>
+            <h1>Walk in the light</h1> 
+            <p>
+                Collect as many fireflies as possible
+            </p>
+            <p>
+                Bombs can be dropped with space, maybe still?
+            </p>
+            <p>
+                Have fun!
+            </p>
+        </div>
     </body>
 </html>
 
