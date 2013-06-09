@@ -203,8 +203,8 @@ GameState.prototype.update = function(){
         if(firefly == undefined) continue;
         firefly.update();
 
-        if(Math.abs(firefly.x-this.player.x) < this.player.playerSize
-                && Math.abs(firefly.y-this.player.y) < this.player.playerSize){
+        if(Math.abs(firefly.x-this.player.x) < Player.REACH
+                && Math.abs(firefly.y-this.player.y) < Player.REACH){
             
             this.player.eatFirefly(firefly);
             this.score++;

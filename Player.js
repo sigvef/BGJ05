@@ -40,6 +40,7 @@ Player.FRICTION = 0.8;
 Player.SPEED = 0.08;
 Player.START_HP = 0.03;
 Player.MAX_HP = 1;
+Player.REACH = 0.7;
 
 Player.canvas = document.createElement('canvas');
 Player.ctx = Player.canvas.getContext('2d');
