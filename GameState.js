@@ -17,6 +17,7 @@ function GameState(socket, renderable){
     this.numLightHouses = 0;
     this.lightHouseSize = 2;
     this.lightHouseAddProb = 0.008;
+    this.score = 0;
 
     this.menu = false;
 
@@ -141,7 +142,9 @@ GameState.prototype.render = function(ctx){
     for(var i=0;i<this.bombs.length;i++){
         this.bombs[i].render(ctx);
     }
-
+    
+    ctx.fillStyle = "white";
+    ctx.fillText(this.score, viewport.x*GU+1*GU, viewport.y*GU+7.5*GU);
     ctx.restore();
 
     if(this.menu){
@@ -198,7 +201,7 @@ GameState.prototype.update = function(){
 
 
     var firefly;
-    for(var i = 0; i<this.fireflies.length;i++){
+    for(var i = 0; i < this.fireflies.length;i++){
         firefly = this.fireflies[i];
         if(firefly == undefined) continue;
         firefly.update();
@@ -207,6 +210,7 @@ GameState.prototype.update = function(){
                 && Math.abs(firefly.y-this.player.y) < this.player.playerSize){
             
             this.player.eatFirefly(firefly);
+            this.score++;
             //Delete firefly;
             firefly = this.fireflies.pop();
             if(i < this.bombs.length){
