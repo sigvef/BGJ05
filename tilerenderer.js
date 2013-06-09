@@ -13,8 +13,20 @@ function TileRenderer(row, col, world, context, renderer){
     }
 
 TileRenderer.prototype.isWall = function(x,y){
+    this.cell = this.world.getCellAt(this.row, this.col);
+    if(this.cell){
+        return this.cell.isWall();
+    } else{
+        return true;
+    }
+    /*
     var tile = this.neighbours[x+1][y+1];
-    return (tile && tile.isWall()) || true;
+    if(tile){
+        return tile.isWall();
+    }else{
+        return true;
+    }
+    */
 };
 
 TileRenderer.prototype.isPath = function(x,y){
