@@ -51,7 +51,7 @@ Player.prototype.eatFirefly = function(firefly){
         this.hp = Player.MAX_HP;
     }
 
-    this.game.sfx.takeFirefly.play();
+    this.game.sfx.takeFirefly.superplay();
     
 }
 

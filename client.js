@@ -35,6 +35,10 @@ function loadAudio(url){
         console.log(ASSETS, url,"COMPLETED");
     };
     audio.src = url;
+    audio.superplay = function(){
+        audio.currentTime = 0;
+        audio.play();
+    }
     return audio;
 }
 
