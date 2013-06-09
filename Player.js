@@ -55,7 +55,8 @@ Player.prototype.eatFirefly = function(firefly){
         this.hp = Player.MAX_HP;
     }
 
-
+    this.game.placeBomb(firefly.x, firefly.y, 0, 4000);
+    
     if(this.game.score % 5 == 4){
         this.game.sfx.celebrate.superplay();
         this.game.textalizer = 50;
@@ -92,7 +93,6 @@ Player.prototype.update = function(){
     }
 
     if(this.KEYS[this.KEYS.SPACE] && this.bomb_place_cooldown == 0){
-        this.game.placeBomb(this.x, this.y, 999, 3000);
         this.bomb_place_cooldown = Player.BOMB_PLACE_COOLDOWN;
     }
 
