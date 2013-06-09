@@ -43,10 +43,20 @@ function Player(x,y,game){
 Player.BOMB_PLACE_COOLDOWN = 40;
 Player.FRICTION = 0.8;
 Player.SPEED = 0.08;
-Player.START_HP = 0.5;
+Player.START_HP = 0.03;
+Player.MAX_HP = 1;
 
 Player.canvas = document.createElement('canvas');
 Player.ctx = Player.canvas.getContext('2d');
+
+
+Player.prototype.eatFirefly = function(firefly){
+    this.hp += 0.03;
+    if(this.hp > Player.MAX_HP){
+        this.hp = Player.MAX_HP;
+    }
+    
+}
 
 Player.prototype.update = function(){
 

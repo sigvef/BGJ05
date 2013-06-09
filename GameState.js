@@ -111,7 +111,8 @@ GameState.prototype.render = function(ctx){
 
     this.player.render(ctx,this.darkctx, viewport);
 
-    for(var i = 0; i<this.numFireflies;i++){
+    for(var i = 0; i < this.fireflies.length;i++){
+        if(this.fireflies[i] == undefined) continue;
         this.fireflies[i].render(ctx,this.darkctx, viewport);
     }
 
@@ -192,8 +193,22 @@ GameState.prototype.update = function(){
 
     this.spawnHouse.update();
 
-    for(var i = 0; i<this.numFireflies;i++){
-        this.fireflies[i].update();
+    var firefly;
+    for(var i = 0; i<this.fireflies.length;i++){
+        firefly = this.fireflies[i];
+        if(firefly == undefined) continue;
+        firefly.update();
+
+        if(Math.abs(firefly.x-this.player.x) < this.player.playerSize
+                && Math.abs(firefly.y-this.player.y) < this.player.playerSize){
+            
+            this.player.eatFirefly(firefly);
+            //Delete firefly;
+            firefly = this.fireflies.pop();
+            if(i < this.bombs.length){
+                this.fireflies[i--] = firefly;
+            }
+        }
     }
 
     for(var i=0;i<this.bombs.length;i++){
