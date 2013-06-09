@@ -2,13 +2,12 @@ function LevelRenderer(game) {
     this.game = game;
     this.height = 9;
     this.width = 16;
-    this.wall = new Image();
-    this.wall.src = "hedge.png";
-    this.road = new Image();
-    this.road.src = "ground.png";
     this.tileRenderers = {};
     this.accumulator = Math.floor(Math.random() * 60);
 }
+
+LevelRenderer.prototype.wall = loadImage("hedge.png");
+LevelRenderer.prototype.road = loadImage("ground.png");
 
 /*LevelRenderer.prototype.update = function(dt) {
     this.accumulator = (this.accumulator + dt) % 60;

@@ -1,5 +1,7 @@
 missedGFXFrames = 0;
 
+ASSETS = 0;
+
 SELF_NAME = ''
 
 /* smoothstep interpolaties between a and b, at time t from 0 to 1 */
@@ -24,6 +26,18 @@ function cube_interpolation(a, b, t){
 
 function clamp(low, x, high){
     return Math.max(low,Math.min(x,high));
+}
+
+function loadImage(url){
+    var image = new Image();  
+    ASSETS++;
+    console.log(ASSETS, "loading",url);
+    image.onload = function(){
+        ASSETS--;
+        console.log(ASSETS, url,"COMPLETED");
+    };
+    image.src = url;
+    return image;
 }
 
 function blur(ctx){
@@ -61,6 +75,9 @@ function loop(){
         sm.update();
         dt-= 20;
     }
+
+    if(ASSETS) return;
+
     /* clearing canvas */
     canvas.width = canvas.width;
 
@@ -84,6 +101,8 @@ blurcanvas = document.createElement("canvas");
 blurctx = canvas.getContext("2d");
 
 function client(){
+
+    ASSETS++;
 
     /* global on purpose */
 
@@ -120,6 +139,8 @@ function client(){
 
 
     /* start the game */
+
+    ASSETS--;
 
     sm.changeState("game");
 

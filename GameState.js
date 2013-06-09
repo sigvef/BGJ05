@@ -22,13 +22,9 @@ function GameState(socket, renderable){
 
     this.renderable = renderable;
 
-    if(this.renderable){
-        this.darkvas = document.createElement('canvas');
-        this.darkctx = this.darkvas.getContext('2d');
-        this.menuDiv = document.getElementById('menuDiv');
-        this.titleImage = new Image();
-        this.titleImage.src = "title.png";
-    }
+    this.darkvas = document.createElement('canvas');
+    this.darkctx = this.darkvas.getContext('2d');
+    this.menuDiv = document.getElementById('menuDiv');
 
     var that = this;
     this.keydownMenuListener = function(e){
@@ -38,7 +34,7 @@ function GameState(socket, renderable){
     }
 }
 
-
+GameState.prototype.titleImage = loadImage("title.png");
 
 GameState.prototype.placeBomb = function(x,y,duration, blast_duration){
     this.bombs.push(new LightBomb({x:x, y:y, duration_in_ms: duration, blast_duration: blast_duration}));
