@@ -101,7 +101,6 @@ function client(){
         }
 
         game.getCellAt = function(global_row, global_col){
-            console.log("asking for maze cell at", global_row, global_col);
             var params = [global_row, global_col];
             if(!game.map_asked_for[params]){
                 game.map_asked_for[params] = true;
