@@ -13,7 +13,8 @@ function TileRenderer(row, col, world, context, renderer){
     }
 
 TileRenderer.prototype.isWall = function(x,y){
-    return this.neighbours[x+1][y+1].isWall();
+    var tile = this.neighbours[x+1][y+1];
+    return (tile && tile.isWall()) || true;
 };
 
 TileRenderer.prototype.isPath = function(x,y){
@@ -49,11 +50,15 @@ TileRenderer.prototype.render = function(render_row, render_col){
         this.renderRoad();
     }
     var cell = this.world.getCellAt(this.row, this.col);
-    if (cell.hasContent()) {
+    /*
+    if (cell && cell.hasContent()) {
+    */
         /*if (cell.content.isCoin()) {
             this.renderCoin(cell.content.value);
         }*/
+    /*
     }
+    */
 };
 
 /*TileRenderer.prototype.renderCoin = function(content_type) {

@@ -44,7 +44,6 @@ GameState.prototype.createFrame = function(){
 
 GameState.prototype.createKeyframe = function(){
     var keyframe = {};
-    keyframe.maze = this.maze;
     keyframe.players = {};
     keyframe.bombs = [];
 
@@ -106,7 +105,7 @@ GameState.prototype.pause = function(){
 }
 
 GameState.prototype.resume = function(){
-    this.maze = new Maze();
+    this.maze = new Maze(this);
     this.connect && this.connect();
 
     for(var i = 0; i < this.numFireflies;i++){

@@ -3,8 +3,9 @@ try{
     require('./util');
 }catch(e){}
 
-function Maze(){
+function Maze(game){
 
+    this.game = game;
     this.patternsMatrix = {};
     this.cells = {};
     blockSize = 0.5;
@@ -49,7 +50,11 @@ Maze.prototype.collide = function(x, y){
     var nx = Math.floor(GU*x/blockSize)|0;
     var ny = Math.floor(GU*y/blockSize)|0;
     var cell = this.getCellAt(nx,ny);
-    return cell.isWall();
+    if(cell){
+        return cell.wall;
+    }else{
+        return true;
+    }
 }
 
 Maze.prototype.getPatternAt = function(coord) {
@@ -72,9 +77,12 @@ Maze.prototype.addCellAt = function(cell, global_row, global_col) {
 
 Maze.prototype.getCellAt = function(global_row, global_col) {
     if (!this.cellExists(global_row, global_col)) {
+        if(this.game.renderable){
+            this.game.getCellAt(global_row, global_col);
+            return;
+        }
         var pattern_coord = Pattern.translateGlobalToPattern(global_row, global_col);
         pattern = this.generatePatternFor(pattern_coord);
-
         for (var internal_row = 0; internal_row < 3; internal_row++) {
             for (var internal_col = 0; internal_col < 3; internal_col++) {
                 this.addCellAt(pattern.internalCellAt(internal_row, internal_col), pattern_coord.row * 3 + internal_row, pattern_coord.col * 3 + internal_col);
@@ -161,8 +169,8 @@ Maze.prototype.generatePatternFor = function(coord) {
 
 Maze.prototype.renderTile = function(row, col, world, context){
         if (!([row,col] in this.tileRenderers)) {
-                this.tileRenderers[[row,col]] = new TileRenderer(row, col, world, context, this);
-                    }
+            this.tileRenderers[[row,col]] = new TileRenderer(row, col, world, context, this);
+        }
         this.tileRenderers[[row,col]].render(row, col);
 };
 

@@ -17,12 +17,6 @@ function sendFrame(socket){
     socket.emit('frame', game.createFrame());
 }
 
-function sendEntireMaze(socket){
-    socket.emit('maze', game.maze.internal);
-}
-
-
-
 io.sockets.on('connection', function (socket) {
 
     console.log('We got a connection!');
@@ -39,8 +33,11 @@ io.sockets.on('connection', function (socket) {
         }
     }
 
-    sendEntireMaze(socket);
     sendKeyframe(socket);
+
+    socket.on('maze get cell at', function(params){
+        socket.emit('maze cell at', [game.maze.getCellAt.apply(game.maze, params), params[0], params[1]]);
+    });
 
 
     socket.on('keydown', function(keyCode){

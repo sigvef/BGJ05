@@ -83,6 +83,8 @@ function client(){
         console.log("doing a connect");
         socket = io.connect('http://localhost:8000');
 
+        game.map_asked_for = {};
+
         game.sendName = function(name){
             socket.emit('set name', name);
         }
@@ -96,6 +98,15 @@ function client(){
 
         game.keyupGameListener = function(e){
             socket.emit('keyup', e.keyCode);
+        }
+
+        game.getCellAt = function(global_row, global_col){
+            console.log("asking for maze cell at", global_row, global_col);
+            var params = [global_row, global_col];
+            if(!game.map_asked_for[params]){
+                game.map_asked_for[params] = true;
+                socket.emit('maze get cell at', params);
+            }
         }
 
         socket.on('connecting', function () {
@@ -118,9 +129,13 @@ function client(){
             game.loadFrame(frame);
         });
 
-        socket.on('maze', function(maze){
-            console.log("GOT MAZE");
-            game.maze.internal = maze;
+        socket.on('maze cell at', function(params){
+            var cell = new Cell();
+            cell.wall = params[0].wall;
+            cell.broken = params[0].broken;
+            cell.content = params[0].content;
+            params[0] = cell;
+            game.maze.addCellAt.apply(game.maze, params);
         });
 
         socket.on('add player', function (id) {
