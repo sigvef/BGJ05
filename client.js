@@ -80,12 +80,13 @@ function loop(){
 canvas = document.createElement("canvas");
 ctx = canvas.getContext("2d");
 canvas.style.zIndex = 999;
+blurcanvas = document.createElement("canvas");
+blurctx = canvas.getContext("2d");
+
 function client(){
 
     /* global on purpose */
 
-    blurcanvas = document.createElement("canvas");
-    blurctx = canvas.getContext("2d");
 
     sm = new StateManager();
 
