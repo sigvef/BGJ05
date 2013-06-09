@@ -168,6 +168,7 @@ GameState.prototype.showMenu = function(){
 
     document.removeEventListener('keydown', this.keydownGameListener);
     document.removeEventListener('keyup', this.keyupGameListener);
+    BLUR = true;
     this.menu = true;
 }
 
@@ -178,6 +179,7 @@ GameState.prototype.hideMenu = function(){
     document.addEventListener('keyup', this.keyupGameListener);
     document.body.removeChild(this.namefield);
     SELF_NAME = this.namefield.value;
+    BLUR = false;
     this.menu = false;
 }
 

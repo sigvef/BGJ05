@@ -26,6 +26,20 @@ function clamp(low, x, high){
     return Math.max(low,Math.min(x,high));
 }
 
+function blur(ctx){
+    var amount = 2;
+    var times = 8;
+
+    while(times --> 0){
+        ctx.scale(1/amount, 1/amount);
+        ctx.drawImage(ctx.canvas, 0, 0);
+        ctx.scale(amount*amount, amount*amount);
+        ctx.drawImage(ctx.canvas, 0, 0);
+        ctx.scale(1/amount, 1/amount);
+    }
+
+}
+
 window.requestAnimFrame = (function(){
     return  window.requestAnimationFrame       || 
     window.webkitRequestAnimationFrame || 
@@ -37,6 +51,8 @@ window.requestAnimFrame = (function(){
     };
 })();
 
+BLUR = false;
+
 function loop(){
     t = +new Date();
     dt += (t-old_time);
@@ -47,7 +63,16 @@ function loop(){
     }
     /* clearing canvas */
     canvas.width = canvas.width;
-    sm.render(ctx);
+
+    if(BLUR){
+        blurcanvas.width = blurcanvas.width;
+        sm.render(blurctx);
+        blur(blurctx);
+        ctx.drawImage(blurcanvas, 0, 0);
+    }else{
+        sm.render(ctx);
+    }
+
     requestAnimFrame(loop);
 }
 
@@ -57,6 +82,9 @@ function client(){
     canvas = document.createElement("canvas");
     ctx = canvas.getContext("2d");
     canvas.style.zIndex = 999;
+
+    blurcanvas = document.createElement("canvas");
+    blurctx = canvas.getContext("2d");
 
     sm = new StateManager();
 
@@ -105,6 +133,9 @@ function resize(e){
     canvas.width = 16*GU;
     canvas.height = 9*GU;
     canvas.style.margin = ((window.innerHeight - 9*GU) /2)+"px 0 0 "+((window.innerWidth-16*GU)/2)+"px";
+
+    blurcanvas.width = canvas.width;
+    blurcanvas.height= canvas.height;
 }
 
 window.onresize = resize;
