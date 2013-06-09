@@ -24,7 +24,7 @@ GameState.prototype.resume = function(){
     for(var i = 0; i < this.numFireflies;i++){
         this.fireflies[i] = new Firefly(Math.random()*16, Math.random()*9);//TODO find some better way to do this
     }
-    this.player = new Player(-1.75,0);
+    this.player = new Player(this.maze.blockSize,0);
 }
 
 GameState.prototype.render = function(ctx){
@@ -38,9 +38,8 @@ GameState.prototype.render = function(ctx){
         width: 16,
         height: 9 
     };
-    
     ctx.translate(Math.floor(-viewport.x*GU), Math.floor(-viewport.y*GU));
-
+    //console.log("Player x:"+((this.player.x/this.maze.blockSize)|0)+" y:"+((this.player.y/this.maze.blockSize)|0));
 
     this.darkctx.fillStyle = 'black';
     this.darkctx.fillRect(0, 0, 16*GU+GU, 9*GU+GU);
@@ -57,7 +56,7 @@ GameState.prototype.render = function(ctx){
 
     ctx.save();
     ctx.globalAlpha = 0.98;
-    ctx.drawImage(this.darkvas, viewport.x*GU-0.5*GU, viewport.y*GU-0.5*GU);
+    //ctx.drawImage(this.darkvas, viewport.x*GU-0.5*GU, viewport.y*GU-0.5*GU);
     ctx.restore();
 
     
