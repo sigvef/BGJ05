@@ -81,15 +81,7 @@ function loop(){
     /* clearing canvas */
     canvas.width = canvas.width;
 
-
-    if(BLUR){
-        blurcanvas.width = blurcanvas.width;
-        sm.render(blurctx);
-        blur(blurctx);
-        ctx.drawImage(blurcanvas, 0, 0);
-    }else{
-        sm.render(ctx);
-    }
+    sm.render(ctx);
 
     requestAnimFrame(loop);
 }
