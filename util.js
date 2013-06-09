@@ -1,4 +1,4 @@
-function shuffle(array) {
+Array.shuffle = function(array) {
     var counter = array.length, temp, index;
 
     // While there are elements in the array
@@ -13,7 +13,7 @@ function shuffle(array) {
     }
 
     return array;
-}
+};
 
 Math.roll = function(chance) {
         return Math.random() < chance;

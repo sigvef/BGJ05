@@ -9,23 +9,25 @@
         <link rel="apple-touch-icon" sizes="72x72" href="resources/apple-touch-icon.png" />
         <link rel="apple-touch-icon" sizes="1141x114" href="resources/apple-touch-icon.png" />
         <link rel="shortcut-icon" href="resources/favicon.ico" />
+
         <script src=StateManager.js></script>
         <script src=MainMenuState.js></script>
         <script src=GameState.js></script>
         <script src=Maze.js></script>
         <script src=Player.js></script>
         <script src=LightBomb.js></script>
-	<script src=pattern.js></script>
-	<script src=cell.js></script>
-	<script src=content.js></script>
-	<script src=coord.js></script>
-	<script src=levelrenderer.js></script>
-	<script src=tilerenderer.js></script>
-	<script src=util.js></script>
-	<script src=LightHouse.js></script>
-
-        <script src=bootstrap.js></script>
+        <script src=pattern.js></script>
+        <script src=cell.js></script>
+        <script src=content.js></script>
+        <script src=coord.js></script>
+        <script src=levelrenderer.js></script>
+        <script src=tilerenderer.js></script>
+        <script src=util.js></script>
+        <script src=LightHouse.js></script>
         <script src=Firefly.js></script>
+
+        <script src=client.js></script>
+
         <style>
             *{
                 margin:0;
@@ -39,7 +41,11 @@
             }
         </style>
     </head>
-    <body onload="bootstrap()">
+    <body onload="client()">
+        <audio autoplay loop>
+            <source src=lights.mp3 />
+            <source src=lights.ogg />
+        </audio>
     </body>
 </html>
 

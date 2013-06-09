@@ -28,3 +28,7 @@ Cell.prototype.hasContent = function() {
 Cell.prototype.removeContent = function() {
     return this.content = null;
 };
+
+try{
+    module.exports = Cell;
+}catch(e){}

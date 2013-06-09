@@ -1,17 +1,23 @@
+try{
+    var Pattern = require('./pattern');
+    require('./util');
+}catch(e){}
+
 function Maze(game){
 
-    /* internal is some internal representation of the maze,
-       either a graph or an array of cells or whatever is best */
+    this.game = game;
     this.patternsMatrix = {};
     this.game = game;
     this.cells = {};
     this.blockSize = 1;
+    try{
     this.hedgeImage = new Image();
     this.groundImage = new Image();
     this.hedgeImage.src = "hedge.png";
     this.groundImage.src = "ground.png";
     this.renderer = new LevelRenderer(this.game); 
-
+    }catch(e){}
+    this.ratioBlockGU = 1;//0.5;
 }
 
 Maze.prototype.render = function(ctx, viewport){
@@ -32,7 +38,11 @@ Maze.prototype.collide = function(x, y){
     var col = Math.floor(x/this.blockSize) | 0;
     var row = Math.floor(y/this.blockSize) | 0;
     var cell = this.getCellAt(row,col);
-    return cell.isWall();
+    if(cell){
+        return cell.isWall();
+    }else{
+        return true;
+    }
 }
 
 Maze.prototype.getPatternAt = function(coord) {
@@ -128,7 +138,7 @@ Maze.prototype.generatePatternFor = function(coord) {
         }
     }
 
-    var connection_functions = shuffle([top_function, right_function, bottom_function, left_function]);
+    var connection_functions = Array.shuffle([top_function, right_function, bottom_function, left_function]);
     for (var i = 0; i < 4; i++) {
         connection_functions[i].call();
     }
@@ -150,3 +160,7 @@ Maze.prototype.renderTile = function(row, col, world, context){
         this.tileRenderers[[row,col]].render(row, col);
 };
 
+
+try{
+    module.exports = Maze;
+}catch(e){}

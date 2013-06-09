@@ -15,8 +15,10 @@ function Firefly(x,y){
 
 Firefly.FRICTION = 0.8;
 Firefly.SPEED = 0.08;
+try{
 Firefly.canvas = document.createElement('canvas');
 Firefly.ctx = Firefly.canvas.getContext('2d');
+}catch(e){}
 
 Firefly.prototype.update = function(){
 
@@ -69,3 +71,6 @@ Firefly.prototype.render = function(ctx, darkctx, viewport){
     darkctx.drawImage(Firefly.canvas,0,0);
 }
 
+try{
+    module.exports = Firefly;
+}catch(e){}

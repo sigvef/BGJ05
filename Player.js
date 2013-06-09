@@ -1,5 +1,5 @@
-function Player(x,y, gamestate){
-    this.gamestate = gamestate;
+function Player(x,y,game){
+    this.game = game;
     this.x = x || 0;
     this.y = y || 0;
     this.dx = 0;
@@ -9,10 +9,21 @@ function Player(x,y, gamestate){
     this.hitBox = 0.05;
 
     this.bomb_place_cooldown = Player.BOMB_PLACE_COOLDOWN;
-    
+
+    this.KEYS = [];
+    this.KEYS.ESC = 27;
+    this.KEYS.SPACE = 32;
+    this.KEYS.UP = 38;
+    this.KEYS.DOWN = 40;
+    this.KEYS.LEFT = 37;
+    this.KEYS.RIGHT = 39;
+
+    for(var i=0;i<256;i++){
+        this.KEYS[i] = false;
+    }
+
     this.personfront = new Image();
     this.personfront.src = "personfront.png";
-    
     this.personback = new Image();
     this.personback.src = "personback.png";
     
@@ -26,11 +37,10 @@ function Player(x,y, gamestate){
     					 "right": this.personside, "left": this.personleft};
     					 
     this.personDirection = "down";
-    
-    
+
 }
 
-Player.BOMB_PLACE_COOLDOWN = 10;
+Player.BOMB_PLACE_COOLDOWN = 40;
 Player.FRICTION = 0.8;
 Player.SPEED = 0.08;
 Player.START_HP = 0.5;
@@ -41,32 +51,32 @@ Player.ctx = Player.canvas.getContext('2d');
 Player.prototype.update = function(){
 
 
-    if(this.gamestate.getPlayerLight() > 250){
+    if(this.game.getPlayerLight() > 250){
         this.hp -= 0.001;
     }
 
-    if(KEYS[KEYS.LEFT]){
+    if(this.KEYS[this.KEYS.LEFT]){
         this.dx = -1;
         this.personDirection = "left";
     }
 
-    if(KEYS[KEYS.RIGHT]){
+    if(this.KEYS[this.KEYS.RIGHT]){
         this.dx = 1;
         this.personDirection = "right";
     }
 
-    if(KEYS[KEYS.UP]){
+    if(this.KEYS[this.KEYS.UP]){
         this.dy = -1;
         this.personDirection =  "up";
     }
 
-    if(KEYS[KEYS.DOWN]){
+    if(this.KEYS[this.KEYS.DOWN]){
         this.dy = 1;
         this.personDirection = "down";
     }
 
-    if(KEYS[KEYS.SPACE] && this.bomb_place_cooldown == 0){
-        sm.activeState.placeBomb(this.x, this.y, 999, 3000);
+    if(this.KEYS[this.KEYS.SPACE] && this.bomb_place_cooldown == 0){
+        this.game.placeBomb(this.x, this.y, 999, 3000);
         this.bomb_place_cooldown = Player.BOMB_PLACE_COOLDOWN;
     }
 
@@ -84,17 +94,17 @@ Player.prototype.update = function(){
     this.dx *= Player.FRICTION;
     this.dy *= Player.FRICTION;
 
-    if(sm.activeState.maze.collide(this.x+this.hitBox,this.y+this.hitBox) == true
-            || sm.activeState.maze.collide(this.x+this.hitBox,this.y-this.hitBox) == true
-            || sm.activeState.maze.collide(this.x-this.hitBox,this.y+this.hitBox) == true
-            || sm.activeState.maze.collide(this.x-this.hitBox,this.y-this.hitBox) == true
+    if(this.x <= 0 || this.game.maze.collide(this.x+this.hitBox,this.y+this.hitBox) == true
+            || this.game.maze.collide(this.x+this.hitBox,this.y-this.hitBox) == true
+            || this.game.maze.collide(this.x-this.hitBox,this.y+this.hitBox) == true
+            || this.game.maze.collide(this.x-this.hitBox,this.y-this.hitBox) == true
             ){
 
         //collision in x direction
-        if(sm.activeState.maze.collide(this.x+this.hitBox,lasty+this.hitBox) == true 
-                || sm.activeState.maze.collide(this.x+this.hitBox,lasty-this.hitBox)== true
-                || sm.activeState.maze.collide(this.x-this.hitBox,lasty+this.hitBox)== true
-                || sm.activeState.maze.collide(this.x-this.hitBox,lasty-this.hitBox)== true
+        if(this.x <= 0 ||  this.game.maze.collide(this.x+this.hitBox,lasty+this.hitBox) == true 
+                || this.game.maze.collide(this.x+this.hitBox,lasty-this.hitBox)== true
+                || this.game.maze.collide(this.x-this.hitBox,lasty+this.hitBox)== true
+                || this.game.maze.collide(this.x-this.hitBox,lasty-this.hitBox)== true
                 ){
             this.x = lastx;
             this.dx = 0;
@@ -102,10 +112,10 @@ Player.prototype.update = function(){
         }
 
         //collision in y direction
-        if(sm.activeState.maze.collide(lastx+this.hitBox,this.y+this.hitBox) == true
-                || sm.activeState.maze.collide(lastx+this.hitBox,this.y-this.hitBox) == true
-                || sm.activeState.maze.collide(lastx-this.hitBox,this.y+this.hitBox) == true
-                || sm.activeState.maze.collide(lastx-this.hitBox,this.y-this.hitBox) == true
+        if(this.game.maze.collide(lastx+this.hitBox,this.y+this.hitBox) == true
+                || this.game.maze.collide(lastx+this.hitBox,this.y-this.hitBox) == true
+                || this.game.maze.collide(lastx-this.hitBox,this.y+this.hitBox) == true
+                || this.game.maze.collide(lastx-this.hitBox,this.y-this.hitBox) == true
                 ){
             this.y = lasty;
             this.dy = 0;
@@ -153,3 +163,7 @@ Player.prototype.render = function(ctx, darkctx, viewport){
         this.y*GU-GU*this.playerSize/2, GU*this.playerSize,GU*this.playerSize); 
 }
 
+Player.prototype.serialize = function(){
+    return {id: this.id, name: this.name, x: this.x, y: this.y, dx: this.dx, dy: this.dy,
+            personDirection: this.personDirection};
+}

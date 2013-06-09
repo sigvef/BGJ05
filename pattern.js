@@ -1,3 +1,8 @@
+try{
+    var Coord = require('./coord');
+    var Cell = require('./cell');
+}catch(e){}
+
 function Pattern(connections) {
     this.top = connections['top'];
     this.right = connections['right'];
@@ -46,3 +51,7 @@ Pattern.translateGlobalToPattern = function(row, col) {
     var pattern_col = Math.floor(col / 3);
     return new Coord(pattern_row, pattern_col);
 };
+
+try{
+    module.exports = Pattern;
+}catch(e){}

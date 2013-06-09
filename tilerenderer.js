@@ -14,11 +14,28 @@ function TileRenderer(row, col, world, context, renderer, game){
     }
 
 TileRenderer.prototype.isWall = function(x,y){
-    return this.neighbours[x+1][y+1].isWall();
+    this.cell = this.world.getCellAt(this.row, this.col);
+    if(this.cell){
+        return this.cell.isWall();
+    } else{
+        return true;
+    }
+    /*
+    var tile = this.neighbours[x+1][y+1];
+    if(tile){
+        return tile.isWall();
+    }else{
+        return true;
+    }
+    */
 };
 
 TileRenderer.prototype.isPath = function(x,y){
-    return this.neighbours[x+1][y+1].isPath();
+    if(this.neighbours[x+1][y+1]){
+        return this.neighbours[x+1][y+1].isPath();
+    }else{
+        return false;
+    }
 };
 
 TileRenderer.prototype.fits = function(arr){
