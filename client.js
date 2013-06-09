@@ -93,10 +93,12 @@ function client(){
             if(e.keyCode == 27){
                 return game.showMenu();
             }
+            game.players[SELF_ID].KEYS[e.keyCode] = true;
             socket.emit('keydown', e.keyCode);
         }
 
         game.keyupGameListener = function(e){
+            game.players[SELF_ID].KEYS[e.keyCode] = false;
             socket.emit('keyup', e.keyCode);
         }
 
