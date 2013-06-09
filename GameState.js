@@ -31,6 +31,9 @@ function GameState(socket, renderable){
 
     var that = this;
     this.keydownMenuListener = function(e){
+        document.body.requestFullscreen && document.body.requestFullscreen();
+        document.body.webkitRequestFullscreen && document.body.webkitRequestFullscreen(); 
+        document.body.mozRequestFullscreen && document.body.mozRequestFullScreen();
         that.hideMenu();
     }
 }
@@ -155,7 +158,7 @@ GameState.prototype.render = function(ctx){
 
     ctx.font = (GU*0.3)+"px Arial";
     ctx.fillStyle = "white";
-    ctx.textAlign = 'center',
+    ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
     if(this.textalizer > 0){
         ctx.fillStyle = 'orange';
@@ -168,6 +171,12 @@ GameState.prototype.render = function(ctx){
         ctx.fillStyle = 'rgba(0,0,0,0.9)';
         ctx.fillRect(0,0, 16*GU, 9*GU);
         ctx.drawImage(this.titleImage, 0, 0, 16*GU, 9*GU);
+
+        ctx.font = (GU*0.3)+"px Arial";
+        ctx.textAlign = 'right';
+        ctx.fillStyle = 'white';
+        ctx.fillText('Best score: ' + (localStorage.bestScore || 0), 15.5*GU, 6*GU);
+        ctx.fillText('Last score: ' + (localStorage.score || 0), 15.5*GU, 6.4*GU);
     }
 }
 

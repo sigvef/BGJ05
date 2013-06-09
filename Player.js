@@ -75,6 +75,11 @@ Player.prototype.eatFirefly = function(firefly){
 
 Player.prototype.update = function(){
 
+    if(this.hp <= 0){
+        localStorage.score = this.game.score;
+        localStorage.bestScore = Math.max(this.game.score, +localStorage.bestScore);
+        sm.changeState('game');
+    }
 
     if(this.game.getPlayerLight() > 250){
         this.hp -= Player.DIMINISHING_LIGHT;
