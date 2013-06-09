@@ -38,7 +38,7 @@ TileRenderer.prototype.blit = function(sprite, srcX, srcY){
     this.context.drawImage(sprite, this.render_col*blockSize*GU, this.render_row*blockSize*GU, blockSize*GU, blockSize*GU);
     //this.context.drawImage(sprite, srcX, srcY, blockSize*GU, blockSize*GU, 
             //this.render_col*blockSize*GU, this.render_row*blockSize*GU, blockSize*GU, blockSize*GU);
-   // this.context.fillText(this.render_col+","+this.render_row,this.render_col*blockSize*GU, this.render_row*blockSize*GU, blockSize*GU, blockSize*GU);
+    this.context.fillText(this.render_col+","+this.render_row ,this.render_col*blockSize*GU, this.render_row*blockSize*GU, blockSize*GU, blockSize*GU);
 
 };
 
