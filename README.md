@@ -1,20 +1,15 @@
-BGJ05
-=====
+# BGJ05
+## =====
+[Play the game directly in your browser](http://arkt.is/firefly/)
 
+You are lost and alone in a dark watery maze. Your only hope is to use bottled fireflies as a makeshift torch as you look for a way out. How many fireflies can you catch before your light goes out?
 
-for the server (multiplayer branch) you need to do something like:
+## Technology used
 
-(in the root folder of the repo)
+* Environment: HTML5/JavaScript.
+* Tools: vim, git, chrome/chromium, GIMP, Photoshop, FL Studio
+* Maze generation based on http://notninjas.com/2012/07/22/a-finite-tale-of-infinite-mazes/
 
-```
-sudo apt-get install python-pip
-sudo pip install nodeenv
-nodeenv venv
-source venv/bin/activate
-npm install socket.io
-npm install socket.io-client
-npm install connect
-```
+## Help / Controls
 
-Then to run, do:
-    make
+Navigate the maze with the arrow keys. Collect fireflies to earn points and stave off the darkness.
