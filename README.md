@@ -19,8 +19,8 @@ Navigate the maze with the arrow keys. Collect fireflies to earn points and stav
 
 ## Credits
 #### Game Jam Team
-* sigvef 
-* Skarding
+* sigvef / Sigve Sebastian Farstad
+* Skarding / Joakim Skarding
 * Benedicte / Benedicte Ofstad
 * Lionleaf / Andreas Løve Selvik
 
